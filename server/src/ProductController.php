@@ -1,8 +1,12 @@
 <?php
 class ProductController {
     private BrandGateway $brandGateway;
-    public function __construct(BrandGateway $brandGateway) {
+    private ScaleGateway $scaleGateway;
+    public function __construct(
+        BrandGateway $brandGateway,
+        ScaleGateway $scaleGateway) {
         $this->brandGateway = $brandGateway;
+        $this->scaleGateway = $scaleGateway;
     }
 
     public function handleRequest(string $method, ?string $id): void {
