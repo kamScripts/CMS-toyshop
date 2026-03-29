@@ -8,20 +8,43 @@ spl_autoload_register(function ($className){
 });
 //Enable CORS (In production change to specific origin)
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST,PATCH, OPTIONS");
+header("Access-Control-Allow-Methods: GET, POST, PATCH, DELETE");
+header("Access-Control-Allow-Headers: Content-Type");
 header("content-type: application/json; charset=UTF-8");
 
 $parts = explode("/", $_SERVER["REQUEST_URI"]);
+$requested = $parts[3];
 print_r($parts);
-//Process
-switch ($parts[3]) {
-    case "carModels":
-        echo "carModels";
-        break;
-    default:
-        http_response_code(404);
-        exit;
+$itemId = $parts[4] ?? null;
+$configPath = __DIR__ . DIRECTORY_SEPARATOR . "config.ini" ;
+
+try {
+    $config = Utilities::loadConfig($configPath);
+    $db = new Database(
+        $config['host'],
+        $config['db'],
+        $config['user'],
+        $config['password'],
+        $config['charset']
+    );
+
+    switch ($requested) {
+        case "carModels":
+            echo "carModels";
+            break;
+        default:
+            http_response_code(404);
+            exit;
+    }
+
+
+} catch (RuntimeException $e) {
+    http_response_code(500);
+    echo json_encode(['error' => $e->getMessage()]); // In production log
 }
+
+
+
 
 
 

@@ -3,7 +3,7 @@ CREATE DATABASE IF NOT EXISTS modelcars;
 CREATE USER 'admin01'@'localhost' IDENTIFIED BY 'password';
 --GRANT ALL PRIVILEGES  TO AN ADMIN--
 GRANT ALL PRIVILEGES ON modelcars.* TO 'admin01'@'localhost';
-
+-- Tables create schemas
 CREATE TABLE IF NOT EXISTS brand (
   brand_id INT AUTO_INCREMENT,
   brand_name VARCHAR(30) NOT NULL,
@@ -56,4 +56,27 @@ CREATE TABLE variant (
   FOREIGN KEY (model_id)
       REFERENCES model(model_id)
       ON DELETE CASCADE);
+-- INSERT STATEMENTS
 
+INSERT INTO brand (brand_name)
+VALUES ('Pro Models');
+
+INSERT INTO collection (category_name)
+VALUES ( 'Die-cast Cars');
+
+INSERT INTO scale (scale_name)
+VALUES ('1:64');
+
+INSERT INTO model ( model_name, collection_id, brand_id, scale_id, description)
+VALUES
+    ( 'Ford Mondeo', 1, 1, 1, 'Die-cast model Ford Mondeo'),
+    ( 'Honda Civic Type R', 1, 1, 1, 'Die-cast model Honda Civic Type R'),
+    ( 'Hyundai i20', 1, 1, 1, 'Die-cast model Hyundai i20'),
+    ( 'Volvo F12', 1, 1, 1, 'Die-cast model Volvo F12');
+
+INSERT INTO variant ( model_id, variant, sku, price, stock, imagepath)
+VALUES
+    ( 1, 'Titanium X', 'MON-TIT-001', 19.99, 10, 'FordMondeoToyCar2013.png'),
+    ( 2, 'Type R', 'HON-R-002', 24.99, 8, 'hondaCivicTypeR2020.png'),
+    ( 3, 'Play', 'HYU-PL-003', 14.99, 12, 'HyundaiI20Play2020 .png'),
+    ( 4, 'Hauler Edition', 'VOL-H-004', 29.99, 5, 'VolvoF122020uck model.png');
