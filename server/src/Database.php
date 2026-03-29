@@ -29,7 +29,7 @@ class Database {
             // keeps integers and decimals in their proper native PHP types.
             PDO::ATTR_STRINGIFY_FETCHES => false
         ];
-        
+
         try {
             return new PDO($dbAttributes, $this->user, $this->password, $options);
         } catch (PDOException $e) {

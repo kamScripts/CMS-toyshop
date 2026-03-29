@@ -30,7 +30,9 @@ try {
 
     switch ($requested) {
         case "carModels":
-            echo "carModels";
+            $brandGateway = new BrandGateway($db);
+            $productController = new ProductController($brandGateway);
+            $productController->processRequest($_SERVER["REQUEST_METHOD"], $itemId);
             break;
         default:
             http_response_code(404);
