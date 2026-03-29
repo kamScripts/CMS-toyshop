@@ -4,16 +4,16 @@ class ProductController {
     public function __construct(BrandGateway $brandGateway) {
         $this->brandGateway = $brandGateway;
     }
-    // ? przed 2 para to nullable val - innymi slowy optional argument.
-    public function processRequest(string $method, ?string $id): void {
+
+    public function handleRequest(string $method, ?string $id): void {
         if ($id) {
-            $this->processResourcesRequest($method, $id);
+            $this->processItemRequest($method, $id);
         } else {
             $this->processCollectionsRequest($method);
         }
     }
-    private function processResourcesRequest(string $method, string $id): void {
-        $product = $this->gateway->get($id);
+    private function processItemRequest(string $method, string $id): void {
+        $product = $this->brandGateway->get($id);
 
         if(!$product) {
             http_response_code(404);
@@ -23,16 +23,7 @@ class ProductController {
         switch($method) {
             case "PATCH":
                 $data = (array) json_decode(file_get_contents("php://input"), TRUE); //in real project $data = $_POST
-
-                $errors = $this->getValidationErrors($data, false);
-
-                if (! empty($errors)) {
-                    http_response_code(422);// unprocessable entity http response code.
-                    echo json_encode(["errors"=>$errors]);
-                    break;
-                }
-
-                $rows = $this->gateway->update($product, $data);
+                $rows = $this->brandGateway->update($product, $data);
                 echo json_encode([
                     "message" => "Product(id=$id)  updated successfully.",
                     "rows" => $rows,
@@ -42,7 +33,7 @@ class ProductController {
                 echo json_encode($product);
                 break;
             case "DELETE":
-                $rows = $this->gateway->delete($id);
+                $rows = $this->brandGateway->delete($id);
                 echo json_encode([
                     "message" => "Product(id=$id)  deleted successfully.",
                     "rows" => $rows,
@@ -62,15 +53,6 @@ class ProductController {
                 // json_decode returns null if post request is empty,
                 // therefore cast to array -> if null return empty array instead of null
                 $data = (array)json_decode(file_get_contents("php://input"), TRUE); //in real project $data = $_POST
-
-                $errors = $this->getValidationErrors($data);
-
-                if (! empty($errors)) {
-                    http_response_code(422);// unprocessable entity http response code.
-                    echo json_encode(["errors"=>$errors]);
-                    break;
-                }
-
                 $id = $this->brandGateway->create($data);
 
                 http_response_code(201); // CREATE http response code.
@@ -85,20 +67,4 @@ class ProductController {
 
         }
     }
-    //validate name only if row is new
-    /*
-    private function getValidationErrors(array $data ,bool $is_new = true): array {
-        $errors = [];
-        if ($is_new && empty($data["name"])) {
-            $errors[] = "Name is required";
-        }
-        if (array_key_exists("size", $data)) {
-
-            if (filter_var($data["size"], FILTER_VALIDATE_INT) === false) {
-                $errors[] = "Size must be an integer";
-            }
-        }
-        return $errors;
-    }*/
-
 }
