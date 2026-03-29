@@ -1,23 +1,41 @@
 <?php
+
+/**
+ * TODO: add update and delete method that uses correct gateway to edit records from input array
+ * TODO: create input validation function
+ */
 class ProductController {
     private BrandGateway $brandGateway;
     private ScaleGateway $scaleGateway;
+    private CollectionGateway $collectionGateway;
+    private ModelGateway $modelGateway;
+    private VariantGateway $variantGateway;
+
     public function __construct(
         BrandGateway $brandGateway,
-        ScaleGateway $scaleGateway) {
+        ScaleGateway $scaleGateway,
+        CollectionGateway $collectionGateway,
+        ModelGateway $modelGateway,
+        VariantGateway $variantGateway)
+    {
         $this->brandGateway = $brandGateway;
         $this->scaleGateway = $scaleGateway;
+        $this->collectionGateway = $collectionGateway;
+        $this->modelGateway = $modelGateway;
+        $this->variantGateway = $variantGateway;
     }
 
-    public function handleRequest(string $method, ?string $id): void {
+    public function handleRequest(string $method, ?string $id): void
+    {
         if ($id) {
             $this->processItemRequest($method, $id);
         } else {
             $this->processCollectionsRequest($method);
         }
     }
-    private function processItemRequest(string $method, string $id): void {
-        $product = $this->brandGateway->get($id);
+    private function processItemRequest(string $method, string $id): void
+    {
+        $product = $this->variantGateway->getSingleJoin($id);
 
         if(!$product) {
             http_response_code(404);
@@ -48,10 +66,12 @@ class ProductController {
                 header("Allow: GET,PATCH,DELETE");
         }
     }
-    private function processCollectionsRequest(string $method): void {
+    private function processCollectionsRequest(string $method): void
+    {
         switch ($method) {
             case "GET": //get method returns a list of products
-                echo json_encode(["products" => $this->brandGateway->getAll()]);
+                $products = $this->variantGateway->getAllProducts();
+                echo json_encode(["products" => $products]);
                 break;
             case "POST":
                 // json_decode returns null if post request is empty,
@@ -71,4 +91,5 @@ class ProductController {
 
         }
     }
+
 }

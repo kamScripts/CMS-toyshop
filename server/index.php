@@ -1,4 +1,8 @@
 <?php
+/**
+ * TODO: add the error and exception handlers
+ * TODO: add users request and image upload requests
+ */
 //enables type declarations
 declare(strict_types=1);
 //autoloader automatic class import.
@@ -31,7 +35,18 @@ try {
     switch ($requested) {
         case "carModels":
             $brandGateway = new BrandGateway($db);
-            $productController = new ProductController($brandGateway);
+            $scaleGateway = new ScaleGateway($db);
+            $collectionGateway = new CollectionGateway($db);
+            $modelGateway = new ModelGateway($db);
+            $variantGateway = new VariantGateway($db);
+            $productController = new ProductController
+            (
+                $brandGateway,
+                $scaleGateway,
+                $collectionGateway,
+                $modelGateway,
+                $variantGateway
+            );
             $productController->handleRequest($_SERVER["REQUEST_METHOD"], $itemId);
             break;
         default:

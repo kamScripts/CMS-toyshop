@@ -6,6 +6,7 @@ class ModelGateway
     public function __construct(Database $database) {
         $this->pdo = $database->connect();
     }
+
     public function getAll(): array {
         $stmt = $this->pdo->prepare("SELECT * FROM model");
         $stmt->execute();
