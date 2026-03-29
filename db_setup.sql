@@ -56,3 +56,4 @@ CREATE TABLE variant (
   FOREIGN KEY (model_id)
       REFERENCES model(model_id)
       ON DELETE CASCADE);
+
