@@ -28,15 +28,16 @@ class ModelGateway
         $sql = "INSERT INTO model (model_name, collection_id, brand_id, scale_id, description)
                 VALUES (:model_name, :collection_id, :brand_id, :scale_id, :description)";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(":model_name", $data["model_name"], PDO::PARAM_STR);
+        $stmt->bindValue(":model_name", $data["model_name"]);
         $stmt->bindValue(":collection_id", $data["collection_id"] ?? null, PDO::PARAM_INT);
         $stmt->bindValue(":brand_id", $data["brand_id"] ?? null, PDO::PARAM_INT);
         $stmt->bindValue(":scale_id", $data["scale_id"] ?? null, PDO::PARAM_INT);
-        $stmt->bindValue(":description", $data["description"] ?? null, PDO::PARAM_STR);
+        $stmt->bindValue(":description", $data["description"] ?? null);
         $stmt->execute();
         return $this->pdo->lastInsertId();
     }
-    public function update(array $current, array $new): int {
+    public function update(int $currentId, array $new): int {
+        $current = $this->get($currentId);
         $sql = "UPDATE model
                 SET model_name = :model_name, collection_id = :collection_id,
                 brand_id = :brand_id, scale_id = :scale_id, description = :description
@@ -49,8 +50,8 @@ class ModelGateway
         $stmt->bindValue(":collection_id", $new["collection_id"] ?? $current["collection_id"], PDO::PARAM_INT);
         $stmt->bindValue(":brand_id", $new["brand_id"] ?? $current["brand_id"], PDO::PARAM_INT);
         $stmt->bindValue(":scale_id", $new["scale_id"] ?? $current["scale_id"], PDO::PARAM_INT);
-        $stmt->bindValue(":description", $new["description"] ?? $current["description"], PDO::PARAM_STR);
-        $stmt->bindValue(":id", $current["model_id"], PDO::PARAM_INT);
+        $stmt->bindValue(":description", $new["description"] ?? $current["description"]);
+        $stmt->bindValue(":model_id", $current["model_id"], PDO::PARAM_INT);
         $stmt->execute();
 
         return $stmt->rowCount();
@@ -62,5 +63,11 @@ class ModelGateway
         $stmt->execute();
 
         return $stmt->rowCount();
+    }
+    public function describeTable(): array {
+        $sql = "SHOW COLUMNS IN model";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 }

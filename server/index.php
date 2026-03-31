@@ -1,5 +1,6 @@
 <?php
 /**
+ * TODO: IMPORTANT !  - ADD $tableName instance property to gateways
  * TODO: add the error and exception handlers
  * TODO: add users request and image upload requests
  */

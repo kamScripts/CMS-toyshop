@@ -14,4 +14,14 @@
             }
             return $config;
         }
+        public static function extractFromAssociativeArray(array $array): array
+        {
+            $data = [];
+            foreach ($array as $value) {
+                $data[]=$value["Field"];
+            }
+            return $data;
+        }
+
+
     }

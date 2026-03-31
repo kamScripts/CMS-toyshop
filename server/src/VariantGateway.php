@@ -2,7 +2,7 @@
 
 class VariantGateway
 {
-    private PDO $pdo;
+    private PDO $pdo; // PDO
     private string $joinQuery = "
         SELECT 
             m.model_id,
@@ -39,10 +39,6 @@ class VariantGateway
     }
     public function getAllProducts(): array | bool
     {
-        // Start from variant (the "many" side) and LEFT JOIN everything else.
-        // This ensures every variant appears as its own row, even if some models have no variants.
-
-
         $stmt = $this->pdo->prepare($this->joinQuery);
         $stmt->execute();
         return $stmt->fetchAll();
@@ -75,7 +71,8 @@ class VariantGateway
         $stmt->execute();
         return $this->pdo->lastInsertId();
     }
-    public function update(array $current, array $new): int {
+    public function update(int $currentId, array $new): int {
+        $current = $this->get($currentId);
         $sql = "UPDATE variant 
                 SET variant_name = :variant_name, model_id = :model_id, variant = :variant,
                 sku = :sku, price = :price, stock = :stock, imagepath = :imagepath
@@ -96,5 +93,11 @@ class VariantGateway
         $stmt->execute();
 
         return $stmt->rowCount();
+    }
+    public function describeTable(): array {
+        $sql = "SHOW COLUMNS IN variant";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 }

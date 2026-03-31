@@ -30,7 +30,8 @@ class BrandGateway
         $stmt->execute();
         return $this->pdo->lastInsertId();
     }
-    public function update(array $current, array $new): int {
+    public function update(int $currentId, array $new): int {
+        $current = $this->get($currentId);
         $sql = "UPDATE brand SET brand_name = :brand_name WHERE brand_id = :id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(
@@ -49,5 +50,11 @@ class BrandGateway
         $stmt->execute();
 
         return $stmt->rowCount();
+    }
+    public function describeTable(): array {
+        $sql = "SHOW COLUMNS IN brand";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 }
