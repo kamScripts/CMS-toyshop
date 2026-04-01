@@ -3,6 +3,7 @@
 /**
  * TODO: add update and delete method that uses correct gateway to edit records from input array
  * TODO: create input validation function
+ * TODO: Create Response class to eliminate repetitive response structuring which is extra fragile to changes
  */
 class ProductController {
     private BrandGateway $brandGateway;
@@ -51,7 +52,7 @@ class ProductController {
     }
     public function handleRequest(string $method, ?string $id): void
     {
-        if ($id) {
+        if (($id)) {
             $this->processItemRequest($method, $id);
         } else {
             $this->processCollectionsRequest($method);
@@ -59,30 +60,69 @@ class ProductController {
     }
     private function processItemRequest(string $method, string $id): void
     {
-        $product = $this->variantGateway->getSingleJoin($id);
+        if(is_numeric($id)) {
+            $product = $this->variantGateway->getSingleJoin($id);
 
-        if(!$product) {
-            http_response_code(404);
-            echo json_encode(["message" => "Resource not found."]);
-            return;
-        }
-        switch($method) {
-            case "PATCH":
-                $data = (array) json_decode(file_get_contents("php://input"), TRUE);
-                $rows=$this->updateProduct($id,$data);
-                echo json_encode([
-                    "message" => "Product(id=$id)  updated successfully.",
-                    "rows" => $rows,
-                    "data" => $data
-                ]);
-                break;
-            case "GET":
-                echo json_encode($product);
-                break;
+            if (!$product) {
+                http_response_code(404);
+                echo json_encode(["message" => "Resource not found."]);
+                return;
+            }
+            switch ($method) {
+                case "PATCH":
+                    $data = (array)json_decode(file_get_contents("php://input"), TRUE);
+                    $rows = $this->updateProduct($id, $data);
+                    echo json_encode([
+                        "message" => "Product(id=$id)  updated successfully.",
+                        "rows" => $rows,
+                        "data" => $data
+                    ]);
+                    break;
+                case "GET":
+                    echo json_encode($product);
+                    break;
 
-            default:
-                http_response_code(405);
-                header("Allow: GET,PATCH");
+                default:
+                    http_response_code(405);
+                    header("Allow: GET,PATCH");
+            }
+        } else {
+            if ($method == "GET") {
+                switch ($id) {
+                    case "brand":
+                        echo json_encode([
+                            "message" => "$id successfully retrieved.",
+                            "data" => $this->brandGateway->getAll()
+                            ]);
+                        break;
+                    case "scale":
+                        echo json_encode([
+                            "message" => "$id successfully retrieved.",
+                            "data" => $this->scaleGateway->getAll()
+                        ]);
+                        break;
+                    case "collection":
+                        echo json_encode([
+                            "message" => "$id successfully retrieved.",
+                            "data" => $this->collectionGateway->getAll()
+                        ]);
+                        break;
+                    case "model":
+                        echo json_encode([
+                            "message" => "$id successfully retrieved.",
+                            "data" => $this->modelGateway->getAll()
+                        ]);
+                        break;
+                    case "variant":
+                        echo json_encode([
+                            "message" => "$id successfully retrieved.",
+                            "data" => $this->variantGateway->getAll()
+                        ]);
+                        break;
+                    default:
+                        http_response_code(405);
+                }
+            }
         }
     }
     private function processCollectionsRequest(string $method): void
@@ -137,7 +177,8 @@ class ProductController {
     }
 
 
-    /**TODO: add transaction, test
+    /**
+     * TODO: add transaction, test
      * @param array $data: new records data
      * @return int: number of created records
      */
@@ -145,6 +186,7 @@ class ProductController {
         $affectedRows = 0;
         try {
             foreach ($this->tableMap as $table) {
+                // copy - to prevent direct operation  on tableMap
                 $copy = unserialize(serialize($table));
                 array_shift($copy["columns"]);
                 $values = array_intersect_key($data, array_flip($copy["columns"]));
@@ -174,24 +216,29 @@ class ProductController {
     private function updateProduct(int $currentId, array $data): int
     {
         $affectedRows = 0;
+        try {
+            foreach ($this->tableMap as $table) {
+                // Extract only the columns that belong to this table
+                $changes = array_intersect_key($data, array_flip($table["columns"]));
+                if (empty($changes)) {
+                    continue;
+                }
+                $gateway = $this->{$table["gateway"]};
+                $affectedRows += $gateway->update($currentId, $changes);   // clean signature
 
-        foreach ($this->tableMap as $table) {
-            // Extract only the columns that belong to this table
-            $changes = array_intersect_key($data, array_flip($table["columns"]));
-            if (empty($changes)) {
-                continue;
             }
-            $gateway = $this->{$table["gateway"]};
-            $affectedRows += $gateway->update($currentId, $changes);   // clean signature
-
+        } catch (Exception $ex) {
+            http_response_code(500);
+            echo json_encode($ex->getMessage());
+        } finally {
+            return $affectedRows;
         }
-
-        return $affectedRows;
     }
 
-    /** TODO: transactions
+    /**
+     * TODO: transactions
      * @param int $productId
-     * @param string|null $tableName
+     * @param string $tableName
      * @return int
      */
     private function deleteProduct(int $productId, string $tableName): int
@@ -208,6 +255,7 @@ class ProductController {
             return $deletedRows;
 
         } catch (Exception $e) {
+            http_response_code(500);
             echo "Delete failed: " . $e->getMessage();
             return 0;
         } finally {

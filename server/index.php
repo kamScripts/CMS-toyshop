@@ -1,6 +1,6 @@
 <?php
 /**
- * TODO: IMPORTANT !  - ADD $tableName instance property to gateways
+ *
  * TODO: add the error and exception handlers
  * TODO: add users request and image upload requests
  */
@@ -18,9 +18,10 @@ header("Access-Control-Allow-Headers: Content-Type");
 header("content-type: application/json; charset=UTF-8");
 
 $parts = explode("/", $_SERVER["REQUEST_URI"]);
-$requested = $parts[3];
+$requested = $parts[3]; //Method from a client
 print_r($parts);
-$itemId = $parts[4] ?? null;
+$itemId = $parts[4] ?? null; //  id of  full product specs/subCategory
+$detailId = $parts[5] ?? null; // detail Id - carModels/brand/1
 $configPath = __DIR__ . DIRECTORY_SEPARATOR . "config.ini" ;
 
 try {
@@ -48,8 +49,12 @@ try {
                 $modelGateway,
                 $variantGateway
             );
+
             $productController->handleRequest($_SERVER["REQUEST_METHOD"], $itemId);
             break;
+        case "upload":
+            break;
+
         default:
             http_response_code(404);
             exit;
