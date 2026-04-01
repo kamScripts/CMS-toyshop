@@ -47,8 +47,8 @@ class ProductController {
                 "columns" => Utilities::extractFromAssociativeArray($this->variantGateway->describeTable())
             ],
         ];
-    }
 
+    }
     public function handleRequest(string $method, ?string $id): void
     {
         if ($id) {
@@ -79,17 +79,10 @@ class ProductController {
             case "GET":
                 echo json_encode($product);
                 break;
-            case "DELETE":
-                $rows = $this->variantGateway->delete($id);
-                echo json_encode([
-                    "message" => "Product(id=$id)  deleted successfully.",
-                    "rows" => $rows,
 
-                ]);
-                break;
             default:
                 http_response_code(405);
-                header("Allow: GET,PATCH,DELETE");
+                header("Allow: GET,PATCH");
         }
     }
     private function processCollectionsRequest(string $method): void
@@ -103,7 +96,7 @@ class ProductController {
                 // json_decode returns null if post request is empty,
                 // therefore cast to array -> if null return empty array instead of null
                 $data = (array)json_decode(file_get_contents("php://input"), TRUE); //in real project $data = $_POST
-                $id = $this->brandGateway->create($data);
+                $id = $this->createProduct($data);
 
                 http_response_code(201); // CREATE http response code.
                 echo json_encode(
@@ -111,12 +104,38 @@ class ProductController {
                         "id"=> $id
                     ]);
                 break;
+            case "DELETE":
+                $input = (array) json_decode(file_get_contents("php://input"), true);
+
+                $productId   = (int) ($input['id'] ?? -1);
+                $tableToDelete = $input['name'] ?? null;
+
+                if ($productId <= 0) {
+                    http_response_code(400);
+                    echo json_encode(["message" => "Invalid or missing product ID."]);
+                    break;
+                }
+
+                $rows = $this->deleteProduct($productId, $tableToDelete);
+
+                $message = $tableToDelete
+                    ? "Table '{$tableToDelete}' for product(id=$productId) deleted successfully."
+                    : "Product(id=$productId) fully deleted successfully.";
+
+                echo json_encode([
+                    "message" => $message,
+                    "rows"    => $rows,
+                    "table"   => $tableToDelete,
+                    "id"      => $productId
+                ]);
+                break;
             default:
                 http_response_code(405); // method not allowed http response code.
-                header("Allow: GET,POST");
+                header("Allow: GET,POST DELETE");
 
         }
     }
+
 
     /**TODO: add transaction, test
      * @param array $data: new records data
@@ -126,12 +145,18 @@ class ProductController {
         $affectedRows = 0;
         try {
             foreach ($this->tableMap as $table) {
-                $values = array_intersect_key($data, array_flip($table["columns"]));
+                $copy = unserialize(serialize($table));
+                array_shift($copy["columns"]);
+                $values = array_intersect_key($data, array_flip($copy["columns"]));
                 if (empty($values)) {
                     continue;
                 }
-                $gateway = $this->{$table["gateway"]};
-                $affectedRows +=(int) $gateway->create($values);
+                // Only call create() if values are equal to columns except id column
+                if (array_keys($values) === array_values($copy["columns"])) {
+                    $gateway = $this->{$copy["gateway"]};
+                    $affectedRows +=(int) $gateway->create($values);
+                }
+
             }
         } catch (Exception $ex) {
             http_response_code(500);
@@ -163,17 +188,30 @@ class ProductController {
 
         return $affectedRows;
     }
-    private function deleteProduct(int $productId): int
+
+    /** TODO: transactions
+     * @param int $productId
+     * @param string|null $tableName
+     * @return int
+     */
+    private function deleteProduct(int $productId, string $tableName): int
     {
         $deletedRows = 0;
 
-        foreach ($this->tableMap as $table) {
-            $gateway = $this->{$table["gateway"]};
+        try {
+            // Delete from specific table only
+            if (array_key_exists($tableName, $this->tableMap)) {
+                $config = $this->tableMap[$tableName];
+                $gateway = $this->{$config["gateway"]};
+                $deletedRows += $gateway->delete($productId);
+            }
+            return $deletedRows;
 
-            // Delete from this table using the ID
-            $deletedRows += $gateway->delete($productId);
+        } catch (Exception $e) {
+            echo "Delete failed: " . $e->getMessage();
+            return 0;
+        } finally {
+            return $deletedRows;
         }
-
-        return $deletedRows;
     }
 }
