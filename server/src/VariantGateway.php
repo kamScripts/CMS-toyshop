@@ -60,27 +60,26 @@ class VariantGateway
         return $stmt->fetch();
     }
     public function create(array $data): string {
-        $sql = "INSERT INTO variant (variant_name, model_id, variant, sku, price, stock,imagepath)
-                VALUES (:name, :model_id, :variant, :sku, :price, :stock, :imagepath)";
+        $sql = "INSERT INTO variant ( model_id, variant, sku, price, stock,imagepath)
+                VALUES (:model_id, :variant, :sku, :price, :stock, :imagepath)";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(":variant_name", $data["variant_name"]);
         $stmt->bindValue(":model_id", $data["model_id"], PDO::PARAM_INT);
         $stmt->bindValue(":variant", $data["variant"], PDO::PARAM_STR);
         $stmt->bindValue(":sku", $data["sku"], PDO::PARAM_STR);
         $stmt->bindValue(":price", $data["price"], PDO::PARAM_STR);
+        $stmt->bindValue(":stock", $data["stock"], PDO::PARAM_INT);
+        $stmt->bindValue(":imagepath", $data["imagepath"], PDO::PARAM_STR);
         $stmt->execute();
         return $this->pdo->lastInsertId();
     }
     public function update(int $currentId, array $new): int {
         $current = $this->get($currentId);
         $sql = "UPDATE variant 
-                SET variant_name = :variant_name, model_id = :model_id, variant = :variant,
+                SET variant_name = model_id = :model_id, variant = :variant,
                 sku = :sku, price = :price, stock = :stock, imagepath = :imagepath
                 WHERE variant_id = :id";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(
-            ":variant_name", $new["variant_name"] ?? $current["variant_name"]
-        );
+
         $stmt->bindValue(":id", $current["variant_id"], PDO::PARAM_INT);
         $stmt->execute();
 

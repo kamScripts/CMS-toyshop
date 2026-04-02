@@ -20,6 +20,7 @@ header("content-type: application/json; charset=UTF-8");
 $parts = explode("/", $_SERVER["REQUEST_URI"]);
 $requested = $parts[3]; //Method from a client
 print_r($parts);
+
 $itemId = $parts[4] ?? null; //  id of  full product specs/subCategory
 $detailId = $parts[5] ?? null; // detail Id - carModels/brand/1
 $configPath = __DIR__ . DIRECTORY_SEPARATOR . "config.ini" ;
@@ -49,8 +50,7 @@ try {
                 $modelGateway,
                 $variantGateway
             );
-
-            $productController->handleRequest($_SERVER["REQUEST_METHOD"], $itemId);
+            $productController->handleRequest($_SERVER["REQUEST_METHOD"], $itemId,$detailId);
             break;
         case "upload":
             break;
