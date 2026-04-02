@@ -53,6 +53,9 @@ try {
             $productController->handleRequest($_SERVER["REQUEST_METHOD"], $itemId,$detailId);
             break;
         case "upload":
+            if (isset($_FILES['image']['name'])) {
+                //call uploadsController
+            }
             break;
 
         default:

@@ -1,0 +1,77 @@
+PATCH /CMS-toyshop/server/carModels/variant HTTP/1.1
+Accept-Encoding: gzip, deflate, zstd
+Connection: keep-alive
+Content-Length: 64
+User-Agent: HTTPie/3.2.2
+Accept: application/json, */*;q=0.5
+Content-Type: application/json
+Host: localhost
+
+{
+  "collection_id": 2,
+  "category_name": "New collection"
+}
+
+HTTP/1.1 400 Bad Request
+Date: Thu, 02 Apr 2026 14:01:44 GMT
+Server: Apache/2.4.65 (Win64) OpenSSL/3.5.1 PHP/8.2.29
+X-Powered-By: PHP/8.2.29
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, POST, PATCH, DELETE
+Access-Control-Allow-Headers: Content-Type
+Content-Length: 974
+Connection: close
+Content-Type: application/json; charset=UTF-8
+
+Array
+(
+    [0] => 
+    [1] => CMS-toyshop
+    [2] => server
+    [3] => carModels
+    [4] => variant
+)
+{"status":"error","message":"Invalid or missing product ID."}<br />
+<b>Fatal error</b>:  Uncaught TypeError: ProductController::updateProduct(): Argument #3 ($currentId) must be of type int, null given, called in C:\Program Files\Ampps\www\CMS-toyshop\server\src\ProductController.php on line 176 and defined in C:\Program Files\Ampps\www\CMS-toyshop\server\src\ProductController.php:242
+Stack trace:
+#0 C:\Program Files\Ampps\www\CMS-toyshop\server\src\ProductController.php(176): ProductController-&gt;updateProduct()
+#1 C:\Program Files\Ampps\www\CMS-toyshop\server\src\ProductController.php(66): ProductController-&gt;processItemRequest()
+#2 C:\Program Files\Ampps\www\CMS-toyshop\server\index.php(53): ProductController-&gt;handleRequest()
+#3 {main}
+  thrown in <b>C:\Program Files\Ampps\www\CMS-toyshop\server\src\ProductController.php</b> on line <b>242</b><br />
+PATCH /CMS-toyshop/server/carModels/collection/2 HTTP/1.1
+Accept-Encoding: gzip, deflate, zstd
+Connection: keep-alive
+Content-Length: 64
+User-Agent: HTTPie/3.2.2
+Accept: application/json, */*;q=0.5
+Content-Type: application/json
+Host: localhost
+
+{
+  "collection_id": 2,
+  "category_name": "New collection"
+}
+
+HTTP/1.1 200 OK
+Date: Thu, 02 Apr 2026 14:03:00 GMT
+Server: Apache/2.4.65 (Win64) OpenSSL/3.5.1 PHP/8.2.29
+X-Powered-By: PHP/8.2.29
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, POST, PATCH, DELETE
+Access-Control-Allow-Headers: Content-Type
+Content-Length: 266
+Keep-Alive: timeout=5, max=100
+Connection: Keep-Alive
+Content-Type: application/json; charset=UTF-8
+
+Array
+(
+    [0] => 
+    [1] => CMS-toyshop
+    [2] => server
+    [3] => carModels
+    [4] => collection
+    [5] => 2
+)
+{"status":"success","message":"Product(id=collection)  updated successfully.","rows":1,"data":{"collection_id":2,"category_name":"New collection"}}

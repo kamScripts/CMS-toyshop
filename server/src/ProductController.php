@@ -1,9 +1,10 @@
 <?php
 
-/**
- * TODO: add update and delete method that uses correct gateway to edit records from input array
- * TODO: create input validation function
+/** Product Controller class - CRUD operations
+ * handle /carModels ; /carModels/id ; /carModels/category ; /carModels/category/id
  * TODO: Create Response class to eliminate repetitive response structuring which is extra fragile to changes
+ * TODO: Improve tableMaps and its init - reduce repetitive code
+ *
  */
 class ProductController {
     private BrandGateway $brandGateway;
@@ -13,6 +14,13 @@ class ProductController {
     private VariantGateway $variantGateway;
     private array $tableMap;
 
+    /** Initialize Controller with table gateways, and tables schema map for correct validation
+     * @param BrandGateway $brandGateway
+     * @param ScaleGateway $scaleGateway
+     * @param CollectionGateway $collectionGateway
+     * @param ModelGateway $modelGateway
+     * @param VariantGateway $variantGateway
+     */
     public function __construct(
         BrandGateway $brandGateway,
         ScaleGateway $scaleGateway,
@@ -26,7 +34,7 @@ class ProductController {
         $this->modelGateway = $modelGateway;
         $this->variantGateway = $variantGateway;
 
-        $this->tableMap = [   //dynamic tableMap
+        $this->tableMap = [   //tables schema
             "brand" => [
                 "gateway" => "brandGateway",
                 "columns" => Utilities::extractFromAssociativeArray($this->brandGateway->describeTable(), 'Field'),
@@ -60,18 +68,15 @@ class ProductController {
         ];
 
     }
-    public function show():void{ // TEST function --> REMOVE BEFORE SUBMISSION
-        print_r($this->tableMap);
-    }
     public function handleRequest(string $method, ?string $id, ?string $detailId): void
     {
         if (($id)) {
-            $this->processItemRequest($method, $id);
+            $this->processItemRequest($method, $id, $detailId);
         } else {
             $this->processCollectionsRequest($method);
         }
     }
-    private function processItemRequest(string $method, string $id): void
+    private function processItemRequest(string $method, string $id, ?string $detailId): void
     {
         if(is_numeric($id)) {
             $product = $this->variantGateway->getSingleJoin($id);
@@ -82,16 +87,6 @@ class ProductController {
                 return;
             }
             switch ($method) {
-                case "PATCH":
-                    $data = (array)json_decode(file_get_contents("php://input"), TRUE);
-                    $rows = $this->updateProduct($id, $data);
-                    echo json_encode([
-                        "status" => "success",
-                        "message" => "Product(id=$id)  updated successfully.",
-                        "rows" => $rows,
-                        "data" => $data
-                    ]);
-                    break;
                 case "GET": // full product item details
                     echo json_encode([
                         "status" => "success",
@@ -103,9 +98,11 @@ class ProductController {
 
                 default:
                     http_response_code(405);
-                    header("Allow: GET,PATCH");
+                    header("Allow: GET");
             }
-        } else { //if itemId - is category
+        }
+        else { //if itemId - is category
+            //Unnecessary switch - reduce repetitive code in GET
             if ($method == "GET") {
                 switch ($id) {
                     case "brand":
@@ -149,84 +146,57 @@ class ProductController {
             }
             if ($method == "POST") {
                 $data = (array)json_decode(file_get_contents("php://input"), TRUE);
-
-                switch ($id) {
-                    case "brand":
-                        $result = $this->createProduct($data, "brand");
-                        if ($result>0) {
-                            echo json_encode([
-                                "status" => "success",
-                                "message" => " item with index $result successfully inserted."
-                            ]);
-                        }
-                        else {
-                            echo json_encode([
-                                "status" => "error"
-                            ]);
-                        }
-                        break;
-                    case "scale":
-                        $result = $this->createProduct($data, "scale");
-                        if ($result>0) {
-                            echo json_encode([
-                                "status" => "success",
-                                "message" => " item with index $result successfully inserted."
-                            ]);
-                        }
-                        else {
-                            echo json_encode([
-                                "status" => "error"
-                            ]);
-                        }
-                        break;
-                    case "collection":
-                        $result = $this->createProduct($data, "collection");
-                        if ($result>0) {
-                            echo json_encode([
-                                "status" => "success",
-                                "message" => " item with index $result successfully inserted."
-                            ]);
-                        }
-                        else {
-                            echo json_encode([
-                                "status" => "error"
-                            ]);
-                        }
-                        break;
-                    case "model":
-                        $result = $this->createProduct($data, "model");
-                        if ($result>0) {
-                            echo json_encode([
-                                "status" => "success",
-                                "message" => " item with index $result successfully inserted."
-                            ]);
-                        }
-                        else {
-                            echo json_encode([
-                                "status" => "error"
-                            ]);
-                        }
-                        break;
-                    case "variant":
-                        $result = $this->createProduct($data, "variant");
-                        if ($result>0) {
-                            echo json_encode([
-                                "status" => "success",
-                                "message" => " item with index $result successfully inserted."
-                            ]);
-                        }
-                        else {
-                            echo json_encode([
-                                "status" => "error"
-                            ]);
-                        }
-                        break;
-                    default:
-                        http_response_code(405);
+                $result = $this->createProduct($data, $id);
+                if ($result>0) {
+                    echo json_encode([
+                        "status" => "success",
+                        "message" => " item with index $result successfully inserted."
+                    ]);
+                }
+                else {
+                    http_response_code(400);
+                    echo json_encode([
+                        "status" => "error"
+                    ]);
                 }
             }
+            if ($method == "DELETE") {
+                if ($detailId <= 0) {
+                    http_response_code(400);
+                    echo json_encode(["status"=>"error", "message" => "Invalid or missing product ID."]);
+                }
 
+                $rows = $this->deleteProduct($id, $detailId);
 
+                echo json_encode([
+                    "message" => "Item deleted successfully.",
+                    "rows"    => $rows,
+                    "table"   => $id,
+                    "status"      => "success"
+                ]);
+            }
+            if ($method == "PATCH") {
+                if ($detailId <= 0) {
+                    http_response_code(400);
+                    echo json_encode(["status"=>"error", "message" => "Invalid or missing product ID."]);
+                }
+                $data = (array)json_decode(file_get_contents("php://input"), TRUE);
+                $rows = $this->updateProduct($data, $id, $detailId);
+                if ($rows > 0) {
+                    echo json_encode([
+                        "status" => "success",
+                        "message" => "Product(id=$id)  updated successfully.",
+                        "rows" => $rows,
+                        "data" => $data
+                    ]);
+                }
+                else {
+                    http_response_code(400);
+                    echo json_encode([
+                        "status" => "error"
+                    ]);
+                }
+            }
         }
     }
     private function processCollectionsRequest(string $method): void
@@ -236,39 +206,16 @@ class ProductController {
                 $products = $this->variantGateway->getAllProducts();
                 echo json_encode(["products" => $products]);
                 break;
-
-            case "DELETE":
-                $input = (array) json_decode(file_get_contents("php://input"), true);
-
-                $productId   = (int) ($input['id'] ?? -1);
-                $tableToDelete = $input['name'] ?? null;
-
-                if ($productId <= 0) {
-                    http_response_code(400);
-                    echo json_encode(["status"=>"error", "message" => "Invalid or missing product ID."]);
-                    break;
-                }
-
-                $rows = $this->deleteProduct($productId, $tableToDelete);
-
-                echo json_encode([
-                    "message" => "Table '{$tableToDelete}' for product(id=$productId) deleted successfully.",
-                    "rows"    => $rows,
-                    "table"   => $tableToDelete,
-                    "status"      => "success"
-                ]);
-                break;
             default:
                 http_response_code(405); // method not allowed http response code.
-                header("Allow: GET,POST DELETE");
-
+                header("Allow: GET");
         }
     }
 
 
-    /**
-     * TODO: add transaction, test
-     * @param array $data: new records data
+    /**Insert single record
+     * @param array $data: new record data.
+     * @param string $tableName : insert target.
      * @return int: affected rows
      */
     private function createProduct(array $data, string $tableName): int {
@@ -292,42 +239,39 @@ class ProductController {
         return $affectedRows;
     }
 
-    /**TODO: make as Transaction
+    /** Update single record
      * @param int $currentId: ID of current record
      * @param array $data: collection of records to update like "field" => $newValues
      * @return int affectedRows: number of affected rows
      */
-    private function updateProduct(int $currentId, array $data): int
+    private function updateProduct( array $data, string $tableName, int $currentId): int
     {
-        $affectedRows = 0;
-        try {
-            foreach ($this->tableMap as $table) {
-                // Extract only the columns that belong to this table
-                $changes = array_intersect_key($data, array_flip($table["columns"]));
-
-                if (empty($changes)) {
-                    continue;
-                }
-                if(($table["columns"])) {
-                    $gateway = $this->{$table["gateway"]};
-                    $affectedRows += $gateway->update($currentId, $changes); }
-
-            }
-        } catch (Exception $ex) {
-            http_response_code(500);
-            echo json_encode($ex->getMessage());
-        } finally {
-            return $affectedRows;
+        $validator = new InputValidator($this->tableMap);
+        $validationErrors = $validator->validateInput($tableName, $data);
+        if (!empty($validationErrors)) {
+            $errors = $validationErrors;
+            http_response_code(422); //Unprocessable entity.
+            echo json_encode([
+                "status" => "error",
+                "message" => "Validation failed.",
+                "errors" => $errors
+            ]);
+            return 0;
         }
+        $gateway = $this->{$this->tableMap[$tableName]["gateway"]};
+
+
+        return $gateway->update($currentId, $data);
+
     }
 
-    /**
-     * TODO: transactions
+    /** Delete single table record
+     *
      * @param int $productId
      * @param string $tableName
-     * @return int
+     * @return int: 1 if success
      */
-    private function deleteProduct(int $productId, string $tableName): int
+    private function deleteProduct(string $tableName, int $productId): int
     {
         $deletedRows = 0;
 

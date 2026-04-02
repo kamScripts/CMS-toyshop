@@ -1,4 +1,9 @@
 <?php
+/**Php input validator against controller's tables schema - tableMaps
+ * Validates data type and length of varchar fields
+ * Number of validations reduced to data types used in project
+ * Future use need adding additional validators
+ */
 
 class InputValidator
 {
@@ -21,13 +26,13 @@ class InputValidator
             $nullable = $schema["nullables"][$index] === 'YES';
 
             if (!$nullable && (!$value || $value=='')) {
-                $errors[] = "Column '$column' cannot be null.";
+                $errors[] = "$column cannot be null.";
             }
 
             if ($value) {
                 if (str_starts_with($type, "int")) {
                     if (filter_var($value, FILTER_VALIDATE_INT) === false) {
-                        $errors[] = "Size must be an integer";
+                        $errors[] = "$column must be an integer";
                     }
                 }
                 if (str_starts_with($type, "varchar")) {
