@@ -68,6 +68,13 @@ class ProductController {
         ];
 
     }
+
+    /**Request router process based on URI path
+     * @param string $method: http method
+     * @param string|null $id: URI part after products endpoint
+     * @param string|null $detailId: URI part after $id
+     * @return void
+     */
     public function handleRequest(string $method, ?string $id, ?string $detailId): void
     {
         if (($id)) {
@@ -76,6 +83,14 @@ class ProductController {
             $this->processCollectionsRequest($method);
         }
     }
+
+    /** process db CRUD, and view single product record.
+     * Handles methods: PUT,GET,PATCH,DELETE,
+     * @param string $method:
+     * @param string $id:tableName or product_id
+     * @param string|null $detailId:  record id
+     * @return void
+     */
     private function processItemRequest(string $method, string $id, ?string $detailId): void
     {
         if(is_numeric($id)) {
@@ -199,6 +214,11 @@ class ProductController {
             }
         }
     }
+
+    /**Return joint data of whole products collection, handle GET HTTP request.
+     * @param string $method: http method
+     * @return void
+     */
     private function processCollectionsRequest(string $method): void
     {
         switch ($method) {
@@ -213,7 +233,7 @@ class ProductController {
     }
 
 
-    /**Insert single record
+    /**Insert single record.
      * @param array $data: new record data.
      * @param string $tableName : insert target.
      * @return int: affected rows
@@ -239,7 +259,7 @@ class ProductController {
         return $affectedRows;
     }
 
-    /** Update single record
+    /** Update single record.
      * @param int $currentId: ID of current record
      * @param array $data: collection of records to update like "field" => $newValues
      * @return int affectedRows: number of affected rows
@@ -265,8 +285,7 @@ class ProductController {
 
     }
 
-    /** Delete single table record
-     *
+    /** Delete single table record.
      * @param int $productId
      * @param string $tableName
      * @return int: 1 if success

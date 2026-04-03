@@ -53,7 +53,8 @@ try {
             $productController->handleRequest($_SERVER["REQUEST_METHOD"], $itemId,$detailId);
             break;
         case "upload":
-            $UploadsController = new UploadController();
+            $uploadsController = new UploadController();
+            $uploadsController->handleRequest($_SERVER["REQUEST_METHOD"]);
             break;
 
         default:

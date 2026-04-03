@@ -1,44 +1,106 @@
 <?php
 
+/**Image upload Controller class
+ *
+ */
 class UploadController
 {
 
-    public function __construct(private int $max_size, private int $max_width, private int $max_height)
-    {
-    }
+    public function __construct(
+        private int $max_size = 5000000,
+        private int $max_width = 1280,
+        private int $max_height = 1280,
+        private array $allowed_extensions = ["jpg", "jpeg", "png"],
+    ){}
     public function handleRequest(string $method):void {
-        $allowed_image_types = array("png", "jpeg", "gif");
+
         if ($method !== "POST") {
             http_response_code(405);
             header("Allow: POST");
-            echo json_encode(["message" => "Method not allowed.","status" => "error"]);
-
+            echo json_encode(["message" => "Method not allowed.","status" => "error"
+            ]);
         }
-        if (isset($_FILES["image"]["name"])) {
-            $file = $_FILES["image"];
-            $saveTo = __DIR__ . "/../images/" . $file["name"];
-            $file_extension = pathinfo($saveTo, PATHINFO_EXTENSION);
+        $this->handleImageUpload();
+    }
 
-            if (!in_array($file_extension, $allowed_image_types)) {
-                http_response_code(400);
-                header("Allow: POST");
-                echo json_encode(["message" => "Only JPEG and PNG files are allowed.","status" => "error"]);
-            }
-            if ($file["size"] > $this->max_size) {
-                http_response_code(400);
-                header("Allow: POST");
-                echo json_encode(["message" => "File is too large.","status" => "error"]);
-            }
-            $dims = getimagesize($file["tmp_name"]);
-            if ($dims[0] > $this->max_width || $dims[1] > $this->max_height) {
-                http_response_code(400);
-                header("Allow: POST");
-                echo json_encode(["message" => "File is too large.","status" => "error"]);
-            }
-            move_uploaded_file($file["tmp_name"], $saveTo);
-            echo json_encode(["message" => "File uploaded.","status" => "success"]);
+    /**Core Function, validates file properties,
+     * then sanitises filename removing non-alpha-numeric characters excluding hyphen and underscore.
+     * File is moved to a specified directory on a server (server/images/products/).
+     * Response 200 if success and formated  otherwise 400
+     * @return void
+     */
+    private function handleImageUpload():void {
+        //Correct Upload check
+        //UPLOAD_ERR_OK - 'There is no error, the file uploaded with success.'
+        if(empty($_FILES["image"]) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
+            http_response_code(400);
+            echo json_encode(["message" => "File upload error.","status" => "error"]);
+            return;
+        }
+        $file = $_FILES["image"];
+        // file size check
+        if ($file["size"] > $this->max_size) {
 
+            http_response_code(400);
+            $mb = $this->max_size/1000000;
+            echo json_encode([
+                "message" => "File exceeded maximum allowed size($mb MB).",
+                "status" => "error"]);
+            return;
+        }
+        // split path - sanitise filename and validate extension
+        $file_extension = strtolower(pathinfo($file["name"], PATHINFO_EXTENSION));
+        $filename = strtolower(pathinfo($file["name"], PATHINFO_FILENAME));
+        $filename = preg_replace("/[^a-zA-Z0-9_-]/", "", $filename);// replace dangerous characters
+        if (!in_array($file_extension, $this->allowed_extensions)) {
+            http_response_code(400);
+            echo json_encode(["message" => "File extension not allowed.","status" => "error"]);
+            return;
+        }
+        // image dimensions check
+        $dims = getimagesize($file["tmp_name"]);
+        if (!$dims) {
+            http_response_code(400);
+            echo json_encode(["message" => "Uploaded file invalid.","status" => "error"]);
+            return;
+        }
+        $width = $dims[0];
+        $height = $dims[1];
+        if($width > $this->max_width || $height > $this->max_height) {
+            http_response_code(400);
+            echo json_encode([
+                "message" => "File dimensions exceeds maximum allowed size.",
+                "status" => "error",
+                "details" => [
+                    "width" => $width,
+                    "height" => $height,
+                    "max_width" => $this->max_width,
+                    "max_height" => $this->max_height,
+                    "max_size" => $this->max_size,
+                    "allowed_extensions" => $this->allowed_extensions
+                ]
+            ]);
+            return;
+        }
+        $cleanFilename = $filename . "." . $file_extension; //join path again
+        $destination = __DIR__ . "/../images/products/" . $cleanFilename;
+        //save file to the destination
+        if (move_uploaded_file($file["tmp_name"], $destination)) {
+            $imagePath = $cleanFilename;
 
+            echo json_encode([
+                "message"    => "Image uploaded successfully",
+                "status"     => "success",
+                "filename"   => $cleanFilename,
+                "image_path" => $imagePath,
+                "size"       => $file['size']
+            ]);
+        } else {
+            http_response_code(500);
+            echo json_encode([
+                "message" => "Failed to save the uploaded file.",
+                "status"  => "error",
+            ]);
         }
     }
 }

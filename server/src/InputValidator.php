@@ -43,8 +43,8 @@ class InputValidator
                     if(mb_strlen($value) > $size) {
                         $errors[] = "$column must be less than or equal to $size.";
                     }
-                    if (preg_match('/[^a-zA-Z0-9:.,\-\s]/', $value))  {
-                        $errors[] = "$column must contain only alphanumeric characters or (,.-).";
+                    if (preg_match('/[^a-zA-Z0-9,_-]/', $value))  {
+                        $errors[] = "$column must contain only alphanumeric characters or (,_-).";
                     }
                 }
                 if(str_starts_with($type, "decimal")) {
