@@ -1,9 +1,13 @@
 <?php
-
 class Database {
-
-
-    public function __construct
+    /** Set PDO connection details on initialisation
+     * @param string $host
+     * @param string $db
+     * @param string $user
+     * @param string $password
+     * @param string $chrset
+     */
+        public function __construct
     (
         private string $host,
         private string $db,
