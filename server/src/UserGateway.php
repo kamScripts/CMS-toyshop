@@ -8,7 +8,15 @@ class UserGateway
     public function __construct(Database $database) {
         $this->pdo = $database->connect();
     }
-    public function authenticate(string $email, string $password): array | false {}
+    public function authenticate(string $username, string $password): array | false {
+        $user = $this->getUserByUsername($username);
+        if ($user && password_verify($password, $user['password'])) {
+            unset($user['password']);
+            return $user;
+        } else {
+            return false;
+        }
+    }
     public function getUserByEmail(string $email): array | false {
         $sql = "SELECT * FROM users WHERE email = :email";
         $stmt = $this->pdo->prepare($sql);
@@ -52,6 +60,13 @@ class UserGateway
         $sql = "UPDATE users SET password = :newPassword WHERE id = :userId";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(':newPassword', $newPassword);
+        $stmt->bindValue(':userId', $userId);
+        $stmt->execute();
+        return $stmt->rowCount();
+    }
+    public function deleteUserById(string $userId): int {
+        $sql = "DELETE FROM users WHERE id = :userId";
+        $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(':userId', $userId);
         $stmt->execute();
         return $stmt->rowCount();

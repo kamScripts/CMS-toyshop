@@ -16,7 +16,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PATCH, DELETE");
 header("Access-Control-Allow-Headers: Content-Type");
 header("content-type: application/json; charset=UTF-8");
-
+echo $_SERVER['REQUEST_URI'];
 $parts = explode("/", $_SERVER["REQUEST_URI"]);
 $requested = $parts[3]; //Method from a client
 print_r($parts);
@@ -56,6 +56,7 @@ try {
             $uploadsController = new UploadController();
             $uploadsController->handleRequest($_SERVER["REQUEST_METHOD"]);
             break;
+
 
         default:
             http_response_code(404);
