@@ -176,9 +176,49 @@ class UserController {
         }
 
     }
-    public function logout():int{return 0;}
+    public function logout():void{
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            $_SESSION = array(); //Clear all session variables
+            if (isset($_COOKIE[session_name()])) {
+                setcookie(session_name(), '', time() - -2592000, '/');
+            }
+            session_destroy();
+        }
+        echo json_encode([
+            "status" => "success",
+            "message" => "Logged out successfully."
+        ]);
+    }
     public function checkUsername():int{return 0;}
-    public function getCurrentUser():array{return [];}
+    public function getCurrentUser():void{
+        //Check if user is logged in
+        if (!isset($_SESSION["user_id"])) {
+            http_response_code(401);
+            echo json_encode([
+                "status" => "error",
+                "message" => "Not logged in."
+            ]);
+            return;
+        }
+        $user = $this->userGateway->getUserById($_SESSION["user_id"]);
+        if ($user) {
+            unset($user["password"]);
+            echo json_encode([
+                "status" => "success",
+                "user" => [
+                    "username" => $user["username"],
+                    "user_id" => $user["user_id"],
+                    "email" => $user["email"],
+                ]
+            ]);
+        } else {
+            http_response_code(401);
+            echo json_encode([
+                "status" => "error",
+                "message" => "User not found."
+            ]);
+        }
+    }
     public function delete(string $id):void{
         try {
             $result = $this->userGateway->deleteUserById($id);
@@ -200,13 +240,7 @@ class UserController {
             ]);
         }
     }
-    private function destroySession():void{
-        $_SESSION = array();
-        if (session_id() !== "" || isset($_COOKIE[session_name()])){
-            setcookie(session_name(), '', time() - 3600);
-        }
-        session_destroy();
-    }
+
     private function handleUserById(string $method, int $userId): void{
         switch ($method) {
             case "DELETE":
