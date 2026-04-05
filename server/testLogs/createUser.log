@@ -1,0 +1,115 @@
+POST /CMS-toyshop/server/users/register HTTP/1.1
+Accept-Encoding: gzip, deflate, zstd
+Connection: keep-alive
+Content-Length: 83
+User-Agent: HTTPie/3.2.2
+Accept: application/json, */*;q=0.5
+Content-Type: application/json
+Host: localhost
+
+POST /CMS-toyshop/server/users/register HTTP/1.1
+Accept-Encoding: gzip, deflate, zstd
+Connection: keep-alive
+Content-Length: 83
+User-Agent: HTTPie/3.2.2
+Accept: application/json, */*;q=0.5
+Content-Type: application/json
+Host: localhost
+
+{
+  "username": "admin",
+  "email": "admin@gmail.com",
+  "password": "123!aA"
+}
+
+HTTP/1.1 404 Not Found
+Date: Sun, 05 Apr 2026 17:51:37 GMT
+Server: Apache/2.4.65 (Win64) OpenSSL/3.5.1 PHP/8.2.29
+X-Powered-By: PHP/8.2.29
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, POST, PATCH, DELETE
+Access-Control-Allow-Headers: Content-Type
+Content-Length: 348
+Keep-Alive: timeout=5, max=100
+Connection: Keep-Alive
+Content-Type: application/json; charset=UTF-8
+
+/CMS-toyshop/server/users/registerArray
+(
+    [0] => 
+    [1] => CMS-toyshop
+    [2] => server
+    [3] => users
+    [4] => register
+)
+{"status":"error","message":"Validation failed.","errors":{"username":[],"email":["Invalid domain."],"password":["Password must contain at least 9 characters."]}}{"status":"success","userId":"1","username":"admin"}POST /CMS-toyshop/server/users/register HTTP/1.1
+Accept-Encoding: gzip, deflate, zstd
+Connection: keep-alive
+Content-Length: 83
+User-Agent: HTTPie/3.2.2
+Accept: application/json, */*;q=0.5
+Content-Type: application/json
+Host: localhost
+
+{
+  "username": "admin",
+  "email": "admin@gmail.com",
+  "password": "123!aA"
+}
+
+HTTP/1.1 404 Not Found
+Date: Sun, 05 Apr 2026 17:57:10 GMT
+Server: Apache/2.4.65 (Win64) OpenSSL/3.5.1 PHP/8.2.29
+X-Powered-By: PHP/8.2.29
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, POST, PATCH, DELETE
+Access-Control-Allow-Headers: Content-Type
+Content-Length: 279
+Keep-Alive: timeout=5, max=100
+Connection: Keep-Alive
+Content-Type: application/json; charset=UTF-8
+
+/CMS-toyshop/server/users/registerArray
+(
+    [0] => 
+    [1] => CMS-toyshop
+    [2] => server
+    [3] => users
+    [4] => register
+)
+{"status":"error","message":"Validation failed.","errors":{"username":[],"email":[],"password":["Password must contain at least 9 characters."]}}POST /CMS-toyshop/server/users/register HTTP/1.1
+Accept-Encoding: gzip, deflate, zstd
+Connection: keep-alive
+Content-Length: 86
+User-Agent: HTTPie/3.2.2
+Accept: application/json, */*;q=0.5
+Content-Type: application/json
+Host: localhost
+
+{
+  "username": "admin",
+  "email": "admin@gmail.com",
+  "password": "123456aA!"
+}
+
+HTTP/1.1 404 Not Found
+Date: Sun, 05 Apr 2026 17:58:01 GMT
+Server: Apache/2.4.65 (Win64) OpenSSL/3.5.1 PHP/8.2.29
+X-Powered-By: PHP/8.2.29
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, POST, PATCH, DELETE
+Access-Control-Allow-Headers: Content-Type
+Content-Length: 293
+Keep-Alive: timeout=5, max=100
+Connection: Keep-Alive
+Content-Type: application/json; charset=UTF-8
+
+/CMS-toyshop/server/users/registerArray
+(
+    [0] => 
+    [1] => CMS-toyshop
+    [2] => server
+    [3] => users
+    [4] => register
+)
+{"status":"error","message":"Database error.","error":"SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'admin' for key 'users.username'"}

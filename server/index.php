@@ -56,7 +56,10 @@ try {
             $uploadsController = new UploadController();
             $uploadsController->handleRequest($_SERVER["REQUEST_METHOD"]);
             break;
-
+        case "users":
+            $userGateway = new UserGateway($db);
+            $userController = new UserController($userGateway);
+            $userController->handleRequest($_SERVER["REQUEST_METHOD"], $itemId);
 
         default:
             http_response_code(404);

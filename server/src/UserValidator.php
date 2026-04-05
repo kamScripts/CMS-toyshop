@@ -21,13 +21,9 @@ class UserValidator
         if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
             $errors[]="Invalid email.";
         }
-        if(!checkdnsrr($address[1], "MX")){
-            $errors[]="Invalid domain.";
-        }
         if(mb_strlen($address[0]) > 64){
             $errors[]="email must contain less than 64 characters.";
         }
-
         return $errors;
     }
     public function validatePassword(string $password) : array {
