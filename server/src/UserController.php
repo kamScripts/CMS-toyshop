@@ -55,9 +55,10 @@ class UserController {
                 }
                 break;
 
-            case "checkUsername":
-                if ($method === "GET") {
-                    $this->checkUsername();
+            case "checkUser":
+                if ($method === "POST") {
+                    $data = (array) json_decode(file_get_contents("php://input"), true);
+                    $this->checkUsername($data);
                 } else {
                     http_response_code(405);
                     header("Allow: GET");
@@ -189,7 +190,32 @@ class UserController {
             "message" => "Logged out successfully."
         ]);
     }
-    public function checkUsername():int{return 0;}
+    public function checkUsername(array $data):void{
+
+       if (!isset($data["username"]) || $data["username"] === ""){
+           http_response_code(400);
+           echo json_encode([
+               "status" => "error",
+               "message" => "Missing required fields."
+           ]);
+           return;
+       }
+       $username = trim($data["username"]);
+
+       $user = $this->userGateway->getUserByUsername($username);
+       if ($user) {
+           http_response_code(409);
+           echo json_encode([
+               "status" => "error",
+               "message" => "Username already taken."
+           ]);
+       } else {
+           echo json_encode([
+               "status" => "success",
+               "message" => "Username available."
+           ]);
+       }
+    }
     public function getCurrentUser():void{
         //Check if user is logged in
         if (!isset($_SESSION["user_id"])) {
