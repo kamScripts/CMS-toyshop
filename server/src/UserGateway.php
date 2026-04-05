@@ -65,7 +65,7 @@ class UserGateway
         return $stmt->rowCount();
     }
     public function deleteUserById(string $userId): int {
-        $sql = "DELETE FROM users WHERE id = :userId";
+        $sql = "DELETE FROM users WHERE user_id = :userId";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(':userId', $userId);
         $stmt->execute();

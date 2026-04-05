@@ -1,0 +1,91 @@
+DELETE /CMS-toyshop/server/users/1 HTTP/1.1
+Accept-Encoding: gzip, deflate, zstd
+Accept: */*
+Connection: keep-alive
+Content-Length: 0
+User-Agent: HTTPie/3.2.2
+Host: localhost
+
+
+
+HTTP/1.1 404 Not Found
+Date: Sun, 05 Apr 2026 18:12:09 GMT
+Server: Apache/2.4.65 (Win64) OpenSSL/3.5.1 PHP/8.2.29
+X-Powered-By: PHP/8.2.29
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, POST, PATCH, DELETE
+Access-Control-Allow-Headers: Content-Type
+Content-Length: 254
+Keep-Alive: timeout=5, max=100
+Connection: Keep-Alive
+Content-Type: application/json; charset=UTF-8
+
+/CMS-toyshop/server/users/1Array
+(
+    [0] => 
+    [1] => CMS-toyshop
+    [2] => server
+    [3] => users
+    [4] => 1
+)
+{"status":"error","message":"Database error.","error":"SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'where clause'"}DELETE /CMS-toyshop/server/users/1 HTTP/1.1
+Accept-Encoding: gzip, deflate, zstd
+Accept: */*
+Connection: keep-alive
+Content-Length: 0
+User-Agent: HTTPie/3.2.2
+Host: localhost
+
+
+
+HTTP/1.1 404 Not Found
+Date: Sun, 05 Apr 2026 18:13:23 GMT
+Server: Apache/2.4.65 (Win64) OpenSSL/3.5.1 PHP/8.2.29
+X-Powered-By: PHP/8.2.29
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, POST, PATCH, DELETE
+Access-Control-Allow-Headers: Content-Type
+Content-Length: 181
+Keep-Alive: timeout=5, max=100
+Connection: Keep-Alive
+Content-Type: application/json; charset=UTF-8
+
+/CMS-toyshop/server/users/1Array
+(
+    [0] => 
+    [1] => CMS-toyshop
+    [2] => server
+    [3] => users
+    [4] => 1
+)
+{"status":"success","message":"User 1 deleted.","userId":"1"}DELETE /CMS-toyshop/server/users/3 HTTP/1.1
+Accept-Encoding: gzip, deflate, zstd
+Accept: */*
+Connection: keep-alive
+Content-Length: 0
+User-Agent: HTTPie/3.2.2
+Host: localhost
+
+
+
+HTTP/1.1 200 OK
+Date: Sun, 05 Apr 2026 18:32:14 GMT
+Server: Apache/2.4.65 (Win64) OpenSSL/3.5.1 PHP/8.2.29
+X-Powered-By: PHP/8.2.29
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, POST, PATCH, DELETE
+Access-Control-Allow-Headers: Content-Type
+Content-Length: 181
+Keep-Alive: timeout=5, max=100
+Connection: Keep-Alive
+Content-Type: application/json; charset=UTF-8
+
+/CMS-toyshop/server/users/3Array
+(
+    [0] => 
+    [1] => CMS-toyshop
+    [2] => server
+    [3] => users
+    [4] => 3
+)
+{"status":"success","message":"User 3 deleted.","userId":"3"}

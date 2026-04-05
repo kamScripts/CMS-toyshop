@@ -60,6 +60,7 @@ try {
             $userGateway = new UserGateway($db);
             $userController = new UserController($userGateway);
             $userController->handleRequest($_SERVER["REQUEST_METHOD"], $itemId);
+            break;
 
         default:
             http_response_code(404);
