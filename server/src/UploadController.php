@@ -1,17 +1,29 @@
 <?php
 
-/**Image upload Controller class
- *
+/** TODO:update upload path to public/images dir.
+ *Image upload Controller class
+ * Handles image upload and validates image details.
  */
 class UploadController
 {
-
+    /**Initialise controller with liekly default values.
+     * @param int $max_size: max image size (Bytes).
+     * @param int $max_width: max width(pixels).
+     * @param int $max_height: max height(pixels).
+     * @param array $allowed_extensions allowed file types.
+     */
     public function __construct(
+
         private int $max_size = 5000000,
         private int $max_width = 1280,
         private int $max_height = 1280,
         private array $allowed_extensions = ["jpg", "jpeg", "png"],
     ){}
+
+    /**Handles HTTP requests
+     * @param string $method: HTTP request method
+     * @return void
+     */
     public function handleRequest(string $method):void {
 
         if ($method !== "POST") {
@@ -30,7 +42,7 @@ class UploadController
      * @return void
      */
     private function handleImageUpload():void {
-        //Correct Upload check
+        //Correct Upload validation
         //UPLOAD_ERR_OK - 'There is no error, the file uploaded with success.'
         if(empty($_FILES["image"]) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
             http_response_code(400);
@@ -38,7 +50,7 @@ class UploadController
             return;
         }
         $file = $_FILES["image"];
-        // file size check
+        // file size validation
         if ($file["size"] > $this->max_size) {
 
             http_response_code(400);
@@ -52,12 +64,13 @@ class UploadController
         $file_extension = strtolower(pathinfo($file["name"], PATHINFO_EXTENSION));
         $filename = strtolower(pathinfo($file["name"], PATHINFO_FILENAME));
         $filename = preg_replace("/[^a-zA-Z0-9_-]/", "", $filename);// replace dangerous characters
+        //verify if extension allowed by controller.
         if (!in_array($file_extension, $this->allowed_extensions)) {
             http_response_code(400);
             echo json_encode(["message" => "File extension not allowed.","status" => "error"]);
             return;
         }
-        // image dimensions check
+        // image dimensions validation
         $dims = getimagesize($file["tmp_name"]);
         if (!$dims) {
             http_response_code(400);
@@ -82,7 +95,9 @@ class UploadController
             ]);
             return;
         }
-        $cleanFilename = $filename . "." . $file_extension; //join path again
+        //After sanitising name, validating image details, safely join file path.
+        $cleanFilename = $filename . "." . $file_extension;
+
         $destination = __DIR__ . "/../images/products/" . $cleanFilename;
         //save file to the destination
         if (move_uploaded_file($file["tmp_name"], $destination)) {

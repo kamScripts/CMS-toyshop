@@ -74,6 +74,11 @@ class UserController {
                 break;
         }
     }
+
+    /**Register New User
+     * @param array $data: php input
+     * @return void
+     */
     public function register(array $data):void{
 
         if (!isset($data["username"],$data["email"],$data["password"])){
@@ -143,6 +148,11 @@ class UserController {
         }
 
     }
+
+    /** Log in a User, set sessions
+     * @param array $data: php input
+     * @return void
+     */
     public function login(array $data):void{
 
         if (empty($data["username"]) || empty($data["password"])) {
@@ -177,6 +187,10 @@ class UserController {
         }
 
     }
+
+    /**Log out and safely destroy session
+     * @return void
+     */
     public function logout():void{
         if (session_status() === PHP_SESSION_ACTIVE) {
             $_SESSION = array(); //Clear all session variables
@@ -190,6 +204,11 @@ class UserController {
             "message" => "Logged out successfully."
         ]);
     }
+
+    /**Check Username availability
+     * @param array $data: php input
+     * @return void
+     */
     public function checkUsername(array $data):void{
 
        if (!isset($data["username"]) || $data["username"] === ""){
@@ -216,6 +235,10 @@ class UserController {
            ]);
        }
     }
+
+    /**Get currently logged-in user.
+     * @return void
+     */
     public function getCurrentUser():void{
         //Check if user is logged in
         if (!isset($_SESSION["user_id"])) {
@@ -245,6 +268,11 @@ class UserController {
             ]);
         }
     }
+
+    /**Delete a user from db
+     * @param string $id:user_id
+     * @return void
+     */
     public function delete(string $id):void{
         try {
             $result = $this->userGateway->deleteUserById($id);
@@ -267,6 +295,12 @@ class UserController {
         }
     }
 
+    /**Helper method to facilitate DB CRUD and redirect based on HTTP method
+     * Only Delete available for project needs, switch for easy extension.
+     * @param string $method: HTTP method
+     * @param int $userId: user_id
+     * @return void
+     */
     private function handleUserById(string $method, int $userId): void{
         switch ($method) {
             case "DELETE":

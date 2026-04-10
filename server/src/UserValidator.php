@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * Users table validator
+ * Each column has dedicated validation method.
+ */
 class UserValidator
 {
+    /**Validate input length and restricted characters type
+     * @param string $username
+     * @return array: errors array, empty if successful.
+     */
     public function validateUsername(string $username): array {
         $errors = [];
         if(!preg_match("/^[a-zA-Z0-9_-]+$/", $username)){
@@ -15,6 +23,11 @@ class UserValidator
         }
         return $errors;
     }
+
+    /**Validate email correctness and length
+     * @param string $email
+     * @return array: errors array, empty if successful.
+     */
     public function validateEmail(string $email): array {
         $errors = [];
         $address = explode("@", $email)[1];
@@ -26,6 +39,11 @@ class UserValidator
         }
         return $errors;
     }
+
+    /**Validate password strength.
+     * @param string $password
+     * @return array: errors array, empty if successful.
+     */
     public function validatePassword(string $password) : array {
         $errors = [];
         if(mb_strlen($password) > 32){
