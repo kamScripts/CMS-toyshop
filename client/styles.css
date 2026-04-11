@@ -1,4 +1,4 @@
-/* ============== RESET & BASE ============== */
+/* ============== RESET SCALING & BASE ============== */
 *,
 *::before,
 *::after {
@@ -7,52 +7,76 @@
   padding: 0;
 }
 
+/* ============== CSS VARIABLES ============== */
+:root {
+  /* ============== Colors ============== */
+
+  --colour-primary: #162e6b;
+  --colour-primary-hoover: #1d3b85;
+  --colour-secondary-hover: #dfdede;
+  --colour-text: #1c1c1c;
+  --colour-bg: #f8f9fa;
+  --colour-light: #ffffff;
+  --colour-border: #dfdede;
+  --colour-accent: #6686ea;
+  /* ============== Spacing ============== */
+  --space-xs: 8px;
+  --space-md: 16px;
+  --space-xl: 24px;
+  --space-2xl: 48px;
+  --space-5xl: 60px;
+
+  /* ============== Border Radius ============== */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 50px;
+
+  /* ============== Shadows ============== */
+  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* ============== BASE STYLES ============== */
 body {
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-family: 'Segoe UI', system-ui, sans-serif;;
   line-height: 1.6;
-  color: #1c1c1c;
-  background-color: #f8f9fa;
+  color: var(--colour-text);
+  background-color: var(--colour-bg);
 }
 
 /* ============== HEADER ============== */
 header {
-  background-color: white;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  background-color: var(--colour-light);
+  box-shadow: var(--shadow-sm);
   position: sticky;
   top: 0;
   z-index: 100;
+  padding: var(--space-xl) 64px;
 }
-
+/* ============== HEADER TOP============== */
 .topHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 5%;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--colour-border);
+  margin-bottom: var(--space-xl);
 }
 
 .logoLink {
   display: flex;
   align-items: center;
-  text-decoration: none;
-  color: inherit;
-  font-weight: bold;
-  font-size: 1.5rem;
 }
 
 #logo {
-  height: 112px;
-  margin-right: 10px;
+ max-width: 264px;
+  max-height: 128px;
 }
 
-h1 {
-  color: #222;
-}
 
-/* User Navigation */
+/* ============== USER NAVIGATION ============== */
 .userNav {
   display: flex;
-  gap: 20px;
+  gap: var(--space-2xl);
   list-style: none;
 }
 
@@ -71,112 +95,161 @@ h1 {
   height: 24px;
 }
 
-/* Bottom Header */
+/* ============== BOTTOM HEADER ============== */
 .bottomHeader {
   display: flex;
   width: 100%;
   justify-content: space-around;
   align-items: center;
-  padding: 16px 48px;
-  gap: 20px;
+  gap: var(--space-xl);
   flex-wrap: wrap;
 }
 
-/* ============== SEARCH FORM WITH ICON ============== */
-#searchForm {
+/* ============== SEARCH FORM ============== */
+.horizontalForm{
   display: flex;
-  gap: 24px;
+  gap: var(--space-md);
   align-self: center;
-  flex:1.5;
+  flex: 1.5;
 }
+
 #searchLabel {
   position: fixed;
   top: -5120px;
   left: -5120px;
 }
 
-#searchBar {
+#searchBar, .membersInput{
   width: 100%;
-  padding: 16px;
-  border: 2px solid #ddd;
-  border-radius: 50px;
+  padding: var(--space-md);
+  border: 2px solid var(--colour-border);
+  border-radius: var(--radius-lg);
   font-size: 1rem;
   outline: none;
   transition: border-color 0.3s;
 }
+
 #searchBar:focus {
-  border-color: #6686ea;
+  border-color: var(--colour-accent);
 }
 
 /* ============== MAIN NAVIGATION ============== */
-.mainNav, .contacts {
+.mainNav,
+.contacts {
   display: flex;
   list-style: none;
   font-size: 1.2rem;
 }
+
 .mainNav {
-  gap:1rem;
+  gap: 1rem;
 }
 
 .mainNav a {
   text-decoration: none;
-  color: #333;
-  font-weight: 500;
+  color: var(--colour-text);
+  font-weight: 600;
   transition: color 0.3s;
-
 }
 
 .mainNav a:hover {
-  color: #1e3a8a;
-  border-bottom: 2px solid #1e3a8a;
+  color: var(--colour-primary);
+  border-bottom: 2px solid var(--colour-primary);
 }
 
-/* ============== HERO SECTION ============== */
+/* ============== MAIN SECTION - STANDARD ============== */
 .mainContainer {
-  min-height: 75vh;
+  min-height: 70vh;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 40px;
-  padding: 60px 5%;
+  gap: var(--space-2xl);
   max-width: 1400px;
-  margin: 0 auto;
+  margin: 16px auto;
   align-items: center;
+  padding: var(--space-xl);
 }
-
-.mainContainer article h2 {
-  font-size: 2.8rem;
-  line-height: 1.1;
-  margin-bottom: 20px;
-}
-
-.mainContainer article p {
-  font-size: 1.1rem;
-  color: #1b1b1b;
-  margin-bottom: 30px;
-}
-
-.searchButton, .mainContainer button {
-  padding: 14px 32px;
-  margin-right: 12px;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.05rem;
-  cursor: pointer;
-  background-color: #1e3a8a;
-  color: white;
-}
-
-.mainContainer button:last-child {
-  background-color: transparent;
-  color: #1e3a8a;
-  border: 2px solid #1e3a8a;
-}
-
 .mainContainer img {
   width: 100%;
   height: auto;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+/* ============== HERO SECTION ============== */
+.heroContent {
+  display: flex;
+  flex-direction: column;
+
+}
+h2 {
+  font-size: 2.8rem;
+  line-height: 1.1;
+  margin-bottom: var(--space-xl);
+}
+
+p  {
+  font-size: 1.1rem;
+  color: #1b1b1b;
+  margin-bottom: var(--space-xl);
+}
+/* ============== BUTTONS ============== */
+.primaryBttn,
+.secondaryBttn {
+  padding: 14px 32px;
+  margin-right: 12px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 1.05rem;
+  cursor: pointer;
+  background-color: var(--colour-primary);
+  color: var(--colour-light);
+}
+.primaryBttn:hover {
+  background-color: var(--colour-primary-hoover)  ;
+}
+
+
+.secondaryBttn {
+  background-color: transparent;
+  color: var(--colour-primary);
+  border: 2px solid var(--colour-primary);
+}
+.secondaryBttn:hover {
+  background-color: var(--colour-light);
+}
+
+
+/* ============== LOGIN ============== */
+
+#loginSection {
+  min-height: 55vh;
+}
+.loginContainer {
+  padding: var(--space-xs);
+  display: flex;
+  flex-direction: column;
+}
+
+.membersForm fieldset {
+  display: flex;
+  flex-direction: column;
+  border: none;
+}
+
+.membersForm button, .loginContainer button {
+  margin: var(--space-md);
+}
+.membersInput {
+  margin: 8px auto;
+}
+fieldset legend {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.boldLabel {
+  padding-left: var(--space-md);
+  font-weight: 600;
+  margin-top: var(--space-md);
 }
 
 /* ============== FOOTER ============== */
@@ -184,51 +257,195 @@ footer {
   display: flex;
   justify-content: space-evenly;
   flex-wrap: wrap;
-  background-color: #1e3a8a;
+  background-color: var(--colour-primary);
   color: white;
-  padding: 50px 5% 30px;
+  padding: var(--space-2xl) 30px;
 }
 
 footer h3 {
-  margin-bottom: 20px;
+  margin-bottom: var(--space-xl);
   font-size: 1.3rem;
   text-align: center;
 }
 
 footer a {
-  color: #efeeee;
+  color: var(--colour-light);
   text-decoration: none;
 }
+
 footer a:hover {
-  color: white;
+  color: var(--colour-secondary-hover);
 }
-.footerSection, .contactLinks {
+
+.footerSection,
+.contactLinks {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
+  justify-content: flex-start;
 }
+.siteMap {
+  display: flex;
+  gap: var(--space-xl);
+  align-items: end;
 
+
+}
 .contacts {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  gap: 2rem;
   justify-self: center;
   font-size: 0.8rem;
   font-weight: 600;
 }
+
 .contactIcon {
   color: #dbcdcd;
 }
+/* ============== UTILITY ============== */
+.inactive {
+  display: none;
+}
+/* ============== COONTACT AND ABOUT ============ */
+.aboutSection, .contactSection {
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xl);
+}
 
-/* ============== Media queries ============== */
+.aboutContent, .contactContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
 
+.aboutList {
+  list-style: none;
+  padding-left: 0;
+}
+
+.aboutList li {
+  padding: 8px 0;
+  font-size: 1.05rem;
+}
+
+.contactInfo {
+  background-color: var(--colour-light);
+  padding: var(--space-2xl);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.membersInput {
+  width: 100%;
+  padding: var(--space-md);
+  margin-bottom: var(--space-xl);
+  border: 2px solid var(--colour-border);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+}
+
+.membersInput:focus {
+  border-color: var(--colour-accent);
+  outline: none;
+}
+.membersForm textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+/* ============== PRODUCTS PAGE ============== */
+#productsSection {
+  grid-template-columns: 200px 1fr;
+  gap: var(--space-2xl);
+  padding: var(--space-5xl) var(--space-xl);
+  margin: 0 auto;
+}
+
+.productsContent {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.productsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2xl);
+}
+.productsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-2xl);
+}
+/* ============== FILTERS FORM ============== */
+.filtersForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.filtersFieldset {
+  display: flex;
+  flex-direction: column;
+  border: none;
+}
+.filtersInput {
+  border-color: var(--colour-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-xs);
+}
+
+
+.filterButtons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-top: var(--space-md);
+}
+
+.priceRange {
+  border: none;
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+}
+.priceRange input {
+
+}
+
+/* ============== LOADING ============== */
+.loading, .noResults {
+  text-align: center;
+  padding: var(--space-2xl);
+  font-size: 1.1rem;
+  color: #555;
+}
+.productCard {
+  background-color: var(--colour-light);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.productCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+}
+
+/* ============== Media Queries ============== */
 @media (max-width: 992px) {
+  header {
+    padding: var(--space-xs) var(--space-xl);
+  }
+
   .mainContainer {
     grid-template-columns: 1fr;
     text-align: center;
-    gap: 40px;
+    gap: var(--space-xl);
   }
 
   .bottomHeader {
@@ -236,43 +453,87 @@ footer a:hover {
     align-items: stretch;
   }
 
-  #searchForm {
-    flex-direction: column;
+  .horizontalForm {
     width: 100%;
-    gap: 8px;
+    gap: var(--space-md);
     align-items: center;
   }
 }
 
 @media (max-width: 768px) {
+
+  header {
+    padding: var(--space-md);
+  }
   .topHeader {
     flex-direction: column;
-    gap: 15px;
+    gap: var(--space-xs);
     text-align: center;
   }
-  nav {
-    width: 100%;
-  }
+
   .userNav {
-    justify-content: space-around;
-  }
+    justify-content: space-between;  }
 
   .mainNav ul {
-    gap: 15px;
-    justify-content: center;
+    gap: var(--space-md);
+    justify-content: space-evenly;
     flex-wrap: wrap;
   }
+  #productsSection {
+    grid-template-columns: 1fr;
+  }
+  h2 {
+    font-size: 1rem;
+  }
+
+  .filtersForm {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .filterButtons {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  #applyFilters, #resetFilters {
+    max-height:24px;
+    font-size: 12px;
+    padding: var(--space-xs);
+  }
+
 }
 
 @media (max-width: 480px) {
+  .filtersForm fieldset input, .filtersForm fieldset select {
+    font-size: 12px;
+  }
+  .horizontalForm button {
+    display: none;
+  }
+
+  #searchBar {
+    display: none;
+  }
+
+  .topHeader {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  h1 {
+    position: absolute;
+    left: -9999px;
+  }
 
   .mainContainer {
-    padding: 8px;
+    padding: var(--space-xs);
   }
   .mainContainer article button {
     display: block;
     width: 100%;
-    margin-top: 24px;
+    margin-top: var(--space-xl);
   }
-
 }

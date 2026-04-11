@@ -11,14 +11,14 @@
         <!--Logo, heading, and user navigation-->
         <div class="topHeader">
             <a href="index.html" class="logoLink">
-                <img id="logo" src="assets/appImages/logo.png" alt="Best Cars Models Logo">
+                <img id="logo" src="assets/appImages/logoMinimal.png" alt="Best Cars Models Logo">
             </a>
             <h1>BestCarToys Online Shop</h1>
             <nav aria-label="User navigation">
                 <ul class="userNav navBar">
                     <!-- Sign-in/Sign-up-->
                     <li class="userNavItem iconItem">
-                        <a href="signIn.html">
+                        <a href="login.html">
                             <img class="icon topIcon" src="assets/appImages/userIcon.svg" alt="User Icon">
                             Account
                         </a>
@@ -46,30 +46,33 @@
                 <ul class="mainNav navBar">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="products.html">Products</a></li>
-                    <li><a href="aboutUs.html">About Us</a></li>
-                    <li><a href="contactUs.html">Contact</a></li>
-                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+
                 </ul>
             </nav>
-            <form id="searchForm" action="" method="post" role="search">
+            <form class="horizontalForm" action="" method="post" role="search">
                 <label for="searchBar" id="searchLabel">Search Products</label>
                 <input type="text" id="searchBar" name="searchBar" placeholder="Search here...">
-                <button type="submit" class="searchButton" aria-label="Search products">Search</button>
+                <button type="submit" class="primaryBttn" aria-label="Search products">Search</button>
             </form>
         </div>
     </header>
     <main>
         <section class="mainContainer">
-           <article>
-               <h2 class="productsHeader">Find Your next Car !</h2>
-               <p>BestCarToys is your ultimate destination for high‑quality toy cars, from iconic Hot Wheels classics to premium diecast collectibles. Whether you're a passionate collector, a casual fan, or
-                   shopping for the perfect gift, our curated selection brings together the most exciting miniature machines on the market.
-                   Every model is chosen for its detail, durability, and pure fun factor, giving enthusiasts of all ages something to love.
-               </p>
-               <button>Browse cars</button>
-               <button>About us</button>
-           </article>
             <img src="assets/appImages/hero.png" alt="sport model cars graphic">
+            <article class="heroContent">
+                <h2 class="productsHeader">Find Your next model car !</h2>
+                <p>BestCarToys is your ultimate destination for high‑quality toy cars, from iconic Hot Wheels classics to premium diecast collectibles. Whether you're a passionate collector, a casual fan, or
+                    shopping for the perfect gift, our curated selection brings together the most exciting miniature machines on the market.
+                    Every model is chosen for its detail, durability, and pure fun factor, giving enthusiasts of all ages something to love.
+                </p>
+                <div>
+                    <button class="primaryBttn">Browse cars</button>
+                    <button class="secondaryBttn">About us</button>
+                </div>
+            </article>
+
         </section>
     </main>
     <footer>

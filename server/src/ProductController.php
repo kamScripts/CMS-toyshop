@@ -224,7 +224,9 @@ class ProductController {
         switch ($method) {
             case "GET": //get method returns a list of products
                 $products = $this->variantGateway->getAllProducts();
-                echo json_encode(["products" => $products]);
+                echo json_encode([
+                    "status" => "success",
+                    "products" => $products]);
                 break;
             default:
                 http_response_code(405); // method not allowed http response code.

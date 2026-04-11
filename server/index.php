@@ -16,10 +16,10 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PATCH, DELETE");
 header("Access-Control-Allow-Headers: Content-Type");
 header("content-type: application/json; charset=UTF-8");
-echo $_SERVER['REQUEST_URI'];
+
 $parts = explode("/", $_SERVER["REQUEST_URI"]);
 $requested = $parts[3]; //Method from a client
-print_r($parts);
+
 
 $itemId = $parts[4] ?? null; //  id of  full product specs/subCategory
 $detailId = $parts[5] ?? null; // detail Id - carModels/brand/1
