@@ -168,7 +168,7 @@ header {
   align-items: center;
   padding: var(--space-xl);
 }
-.mainContainer img {
+.heroImg {
   width: 100%;
   height: auto;
   border-radius: var(--radius-md);
@@ -194,8 +194,8 @@ p  {
 /* ============== BUTTONS ============== */
 .primaryBttn,
 .secondaryBttn {
-  padding: 14px 32px;
-  margin-right: 12px;
+  padding: 14px 24px;
+
   border: none;
   border-radius: var(--radius-sm);
   font-size: 1.05rem;
@@ -360,6 +360,7 @@ footer a:hover {
   gap: var(--space-2xl);
   padding: var(--space-5xl) var(--space-xl);
   margin: 0 auto;
+
 }
 
 .productsContent {
@@ -415,15 +416,10 @@ footer a:hover {
 .priceRange input {
 
 }
-
-/* ============== LOADING ============== */
-.loading, .noResults {
-  text-align: center;
-  padding: var(--space-2xl);
-  font-size: 1.1rem;
-  color: #555;
-}
 .productCard {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-xs);
   background-color: var(--colour-light);
   border-radius: var(--radius-md);
   overflow: hidden;
@@ -435,6 +431,37 @@ footer a:hover {
   transform: translateY(-8px);
   box-shadow: 0 15px 35px rgba(0,0,0,0.12);
 }
+.productPrice {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--colour-primary);
+  margin: 8px 0;
+}
+.cardImage {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  background-color: #f8f9fa;
+  box-sizing: border-box;
+}
+
+.productActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-top: 12px;
+}
+
+
+
+/* ============== LOADING ============== */
+.loading, .noResults {
+  text-align: center;
+  padding: var(--space-2xl);
+  font-size: 1.1rem;
+  color: #555;
+}
+
 
 /* ============== Media Queries ============== */
 @media (max-width: 992px) {
@@ -490,7 +517,7 @@ footer a:hover {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    align-items: center;
+
   }
 
   .filterButtons {
