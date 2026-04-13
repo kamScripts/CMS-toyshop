@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
     <title>BestCarsProject login</title>
-    <script src="headerSearch.js" defer></script>
+    <script src="js/headerSearch.js" defer></script>
+    <script type="module" src="js/login.js" defer></script>
 </head>
 <body>
 <header>
@@ -66,11 +67,12 @@
         <form id="loginForm" class="membersForm" role="form">
             <fieldset>
                 <legend>Sign in</legend>
-                <label class="boldLabel" for="loginUsername">Username</label>
-                <input class="membersInput" type="text" id="loginUsername" name="username" placeholder="Enter Username" required>
-                <label class="boldLabel" for="loginPassword">Password</label>
-                <input class="membersInput" type="password" id="loginPassword" name="password" placeholder="Enter Password" required>
-                <button type="submit" class="primaryBttn" aria-label="Login">Login</button>
+                <label class="boldLabel" for="username">Username</label>
+                <input class="membersInput" type="text" id="username" name="username" placeholder="Enter Username" required>
+                <label class="boldLabel" for="password">Password</label>
+                <input class="membersInput" type="password" id="password" name="password" placeholder="Enter Password" required>
+                <p id="loginError" class="errorMessage"></p>
+                <button type="submit" id="loginBtn" class="primaryBttn" aria-label="Login">Sign in</button>
             </fieldset>
         </form>
         <a href="register.html">

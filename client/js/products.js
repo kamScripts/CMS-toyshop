@@ -50,7 +50,6 @@ const applyFiltersFromUrl = (searchTerm) => {
     });
     renderProducts(filtered);
 };
-
 const fetchScale = async () => {
     const path = `${URL}/scale`;
     const response = await fetch(path);
@@ -96,7 +95,6 @@ const fetchBrand = async () => {
         filterBrand.appendChild(option);
     })
 }
-
 const fetchData = async (url) => {
     try {
         loading.classList.remove('inactive');   // show loading

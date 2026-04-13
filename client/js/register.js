@@ -159,7 +159,7 @@ registerForm.addEventListener('submit', async (e) => {
     // Clean and prepare values for post
     const trimmedUsername = username.value.trim();
     const trimmedEmail = email.value.trim();
-    const passwordValue = passwordInput.value;        // use .value
+    const passwordValue = passwordInput.value;
     const confirmValue = confirmInput.value;
     //Validate again and return if not pass
     if (usernameRegex.test(trimmedUsername)) {

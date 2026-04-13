@@ -6,17 +6,23 @@
  */
 //enables type declarations
 declare(strict_types=1);
+session_start();
 //autoloader automatic class import.
 //Directory separator for path compatibility on any OS.
 spl_autoload_register(function ($className){
     require_once __DIR__ . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . $className . ".php";
 });
-//Enable CORS (In production change to specific origin)
-header("Access-Control-Allow-Origin: *");
+
+header("Access-Control-Allow-Origin: http://localhost");
+header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: GET, POST, PATCH, DELETE");
 header("Access-Control-Allow-Headers: Content-Type");
 header("content-type: application/json; charset=UTF-8");
 
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit(0);
+}
 $parts = explode("/", $_SERVER["REQUEST_URI"]);
 $requested = $parts[3]; //Method from a client
 

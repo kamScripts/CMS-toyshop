@@ -32,7 +32,7 @@ class UserGateway
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
     public function getUserById($userId): array | false {
-        $sql = "SELECT * FROM users WHERE id = :userId";
+        $sql = "SELECT * FROM users WHERE user_id = :userId";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(':userId', $userId);
         $stmt->execute();
