@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="dashboard.css">
     <title>BestCarsProject-Dashboard</title>
     <script src="js/headerSearch.js" defer></script>
-    <script type="module" src="js/main.js" defer></script>
+    <script type="module" src="js/dashboard.js" defer></script>
 </head>
 <body>
 <header>
@@ -40,13 +40,6 @@
                         Trolley
                     </a>
                 </li>
-                <li class="">
-                    <button class="secondaryBttn" id="logoutBtn" aria-label="Logout">
-                        <img class="icon topIcon" src="assets/appImages/logout.svg" alt="log out button">
-                        Logout
-                    </button>
-                </li>
-
             </ul>
         </nav>
     </div>
@@ -69,12 +62,31 @@
     </div>
 </header>
 <main>
-    <h2>Dashboard</h2>
-    <section class="dashboardSection">
+    <section class="dashboardContainer">
+        <h2>Welcome to Your Dashboard</h2>
+        <div class="dashboardGrid">
+            <!-- User Account Section -->
+            <div class="card">
+                <h3>Account Information</h3>
+                <div id="userProfile">
+                    <p><strong>Username:</strong> <span id="displayUsername"></span></p>
+                    <p><strong>Email:</strong> <span id="displayEmail"></span></p>
+                </div>
 
+                <button id="editProfileBtn" class="primaryBttn">Edit Profile</button>
+            </div>
 
+            <!-- Quick Links -->
+            <div class="card">
+                <h3>Quick Actions</h3>
+                <ul class="dashboardLinks">
+                    <li><a href="products.html">Manage Products</a></li>
+                    <li><a href="#">Manage Categories</a></li>
+                    <li><a href="#">View messages from users </a></li>
+                </ul>
+            </div>
+        </div>
     </section>
-
 </main>
 <footer>
     <section class="footerSection" aria-label="Site Map">
