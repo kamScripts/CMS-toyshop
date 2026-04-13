@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <title>BestCarsProject register</title>
+  <script src="headerSearch.js" defer></script>
+  <script src="register.js" defer></script>
+</head>
+<body>
+<header>
+  <!--Logo, heading, and user navigation-->
+  <div class="topHeader">
+    <a href="index.html" class="logoLink">
+      <img id="logo" src="assets/appImages/logoMinimal.png" alt="Best Cars Models Logo">
+    </a>
+    <h1>BestCarToys Online Shop</h1>
+    <nav aria-label="User navigation">
+      <ul class="userNav navBar">
+        <!-- Sign-in/Sign-up-->
+        <li class="userNavItem iconItem">
+          <a href="login.html">
+            <img class="icon topIcon" src="assets/appImages/userIcon.svg" alt="User Icon">
+            Account
+          </a>
+        </li>
+        <li class="userNavItem iconItem">
+          <!--Make a popup with info about project-->
+          <a href="index.html">
+            <img class="icon topIcon" src="assets/appImages/info.svg" alt="Info Icon">
+            Info
+          </a>
+        </li>
+        <li class="userNavItem iconItem">
+          <!--Local storage only add/remove from trolley-->
+          <a href="index.html">
+            <img class="icon topIcon" src="assets/appImages/trolleyIcon.svg" alt="Trolley Icon">
+            Trolley
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <!-- Search bar and main navigation container -->
+  <div class="bottomHeader">
+    <nav aria-label="main navigation">
+      <ul class="mainNav navBar">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact</a></li>
+
+      </ul>
+    </nav>
+    <form class="horizontalForm" action="" method="post" role="search">
+      <label for="searchBar" id="searchLabel">Search Products</label>
+      <input type="text" id="searchBar" name="searchBar" placeholder="Search here...">
+      <button type="submit" class="primaryBttn" aria-label="Search products">Search</button>
+    </form>
+  </div>
+</header>
+<main id="regMain">
+  <section id="regSection" class="mainContainer">
+    <h2>Register</h2>
+    <div class="loginContainer">
+
+      <form id="registerForm" class="membersForm">
+        <fieldset>
+          <legend>Sign up</legend>
+          <label class="boldLabel" for="regUsername">Username</label>
+          <input class="membersInput" type="text" id="regUsername" name="username" placeholder="Enter Username" required>
+          <p id="usernameConstraints"></p>
+          <p id="usernameError"></p>
+
+          <label class="boldLabel" for="regEmail">Email</label>
+          <input class="membersInput" type="email" id="regEmail" name="email" placeholder="Enter Email" required>
+          <label class="boldLabel" for="regPassword">Password</label>
+          <input class="membersInput" type="password" id="regPassword" name="password" placeholder="Enter Password" required>
+          <div id="passwordStrength" class="password-strength">
+            <p id="passwordMessage" class="constraint-message"></p>
+            <div class="strength-bars">
+              <div id="strengthBar" class="strength-bar"></div>
+            </div>
+          </div>
+          <label class="boldLabel" for="confirmPassword">Confirm Password</label>
+          <input class="membersInput" type="password" id="confirmPassword" name="password" placeholder="Confirm Password" required>
+          <p id="passwordConstraints"></p>
+          <p id="confirmError" class="error-message"></p>
+          <button id="registerBtn" type="submit" class="primaryBttn" aria-label="Login">Register</button>
+        </fieldset>
+      </form>
+    </div>
+  </section>
+</main>
+<footer>
+  <section class="footerSection" aria-label="Site Map">
+    <h3>Site Map</h3>
+    <nav id="footerNav">
+      <ul class="siteMap navBar">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="aboutUs.html">About Us</a></li>
+        <li><a href="contactUs.html">Contact</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </nav>
+  </section>
+  <section class="contactLinks" aria-label="Contact Us">
+    <h3>Contact Us</h3>
+    <nav id="contactNav" aria-label="Contact Us">
+      <ul class="contacts navBar">
+        <li class="contactsNavItem iconItem">
+          <a href="https://www.instagram.com/">
+            <img class="icon contactIcon" src="assets/appImages/instagram.svg" alt="Instagram Icon">
+            Instagram
+          </a>
+        </li>
+        <li class="contactsNavItem iconItem">
+          <a href="https://www.facebook.com/">
+            <img class="icon contactIcon" src="assets/appImages/facebook.svg" alt="Facebook Icon">
+            Facebook
+          </a>
+        </li>
+        <li class="contactsNavItem iconItem">
+          <a href="mailto:example@gmail.com">
+            <img class="icon contactIcon" src="assets/appImages/mail.svg" alt="Email Icon">
+            Email
+          </a>
+        </li>
+      </ul>
+
+    </nav>
+  </section>
+
+</footer>
+</body>
+</html>

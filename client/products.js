@@ -40,10 +40,6 @@ const initProducts = async () => {
 };
 
 const applyFiltersFromUrl = (searchTerm) => {
-    //Trigger the same filtering logic as the Apply button
-    const selectedCollection = filterCollection ? filterCollection.value : '';
-    const selectedBrand = filterBrand ? filterBrand.value : '';
-    const selectedScale = filterScale ? filterScale.value : '';
 
     const filtered = allProducts.filter(product => {
         return !searchTerm ||
@@ -52,7 +48,6 @@ const applyFiltersFromUrl = (searchTerm) => {
             (product.brand_name && product.brand_name.toLowerCase().includes(searchTerm.toLowerCase()));
 
     });
-
     renderProducts(filtered);
 };
 
@@ -111,9 +106,7 @@ const fetchData = async (url) => {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-
         const data = await response.json();
-
         showProducts(data);
 
     } catch (err) {

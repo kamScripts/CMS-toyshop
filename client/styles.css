@@ -254,6 +254,46 @@ fieldset legend {
   font-weight: 600;
   margin-top: var(--space-md);
 }
+#regSection {
+  align-items: start;
+}
+#regForm p {
+  font-size: 0.9rem;
+  margin-top: 4px;
+  min-height: 1.2em;
+}
+
+.password-strength {
+  margin: 8px 0 16px 0;
+}
+
+.strength-bars {
+  height: 6px;
+  background-color: #e0e0e0;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.strength-bar {
+  height: 100%;
+  width: 0%;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.strength-bar.weak   { background-color: #f44336; }   /* red */
+.strength-bar.medium { background-color: #ff9800; }   /* orange */
+.strength-bar.good   { background-color: #4caf50; }   /* green */
+.strength-bar.strong { background-color: #2e7d32; }   /* dark green */
+
+.constraint-message,
+.error-message {
+  font-size: 0.9rem;
+  min-height: 1.2em;
+}
+
+.error   { color: #d32f2f; }
+.success { color: #388e3c; }
 
 /* ============== FOOTER ============== */
 footer {
@@ -310,6 +350,12 @@ footer a:hover {
 /* ============== UTILITY ============== */
 .inactive {
   display: none;
+}
+.error {
+  outline: indianred solid 2px;
+}
+.success {
+  outline: darkolivegreen solid 2px;
 }
 /* ============== COONTACT AND ABOUT ============ */
 .aboutSection, .contactSection {

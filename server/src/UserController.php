@@ -61,7 +61,7 @@ class UserController {
                     $this->checkUsername($data);
                 } else {
                     http_response_code(405);
-                    header("Allow: GET");
+                    header("Allow: POST");
                 }
                 break;
 

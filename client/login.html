@@ -61,11 +61,11 @@
 </header>
 <main id="loginMain">
     <section id="loginSection" class="mainContainer">
-        <h2>Login / Register</h2>
+        <h2>Log in</h2>
         <div class="loginContainer">
         <form id="loginForm" class="membersForm" role="form">
             <fieldset>
-                <legend>Login</legend>
+                <legend>Sign in</legend>
                 <label class="boldLabel" for="loginUsername">Username</label>
                 <input class="membersInput" type="text" id="loginUsername" name="username" placeholder="Enter Username" required>
                 <label class="boldLabel" for="loginPassword">Password</label>
@@ -73,17 +73,9 @@
                 <button type="submit" class="primaryBttn" aria-label="Login">Login</button>
             </fieldset>
         </form>
-        <button  class="secondaryBttn">Register</button>
-        <form id="registerForm" class="membersForm  inactive">
-            <fieldset>
-                <legend>Sign up</legend>
-                <label class="boldLabel" for="loginUsername">Username</label>
-                <input class="membersInput" type="text" id="regUsername" name="username" placeholder="Enter Username" required>
-                <label class="boldLabel" for="loginPassword">Password</label>
-                <input class="membersInput" type="password" id="regPassword" name="password" placeholder="Enter Password" required>
-                <button type="submit" class="primaryBttn" aria-label="Login">Login</button>
-            </fieldset>
-        </form>
+        <a href="register.html">
+            <button  class="secondaryBttn">Register</button>
+        </a>
         </div>
     </section>
 </main>
