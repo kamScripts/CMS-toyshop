@@ -6,6 +6,9 @@
   margin: 0;
   padding: 0;
 }
+a {
+  text-decoration: none;
+}
 
 /* ============== CSS VARIABLES ============== */
 :root {
@@ -360,6 +363,7 @@ footer a:hover {
   gap: var(--space-2xl);
   padding: var(--space-5xl) var(--space-xl);
   margin: 0 auto;
+  align-items: start;
 
 }
 
