@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="dashboard.css">
+  <title>BestCarsProject-Manage-categories</title>
+  <script type="module" src="js/manageCategories.js"></script>
+
+</head>
+<body>
+<header>
+  <!--Logo, heading, and user navigation-->
+  <div class="topHeader">
+    <a href="index.html" class="logoLink">
+      <img id="logo" src="assets/appImages/logoMinimal.png" alt="Best Cars Models Logo">
+    </a>
+    <h1>BestCarToys Online Shop</h1>
+    <nav aria-label="User navigation">
+      <ul class="userNav navBar">
+        <!-- Sign-in/Sign-up-->
+        <li class="userNavItem iconItem">
+          <a href="login.html">
+            <img class="icon topIcon" src="assets/appImages/userIcon.svg" alt="Account button">
+            Account
+          </a>
+        </li>
+        <li class="userNavItem iconItem">
+          <!--Make a popup with info about project-->
+          <a href="index.html">
+            <img class="icon topIcon" src="assets/appImages/info.svg" alt="Info button">
+            Info
+          </a>
+        </li>
+        <li class="userNavItem iconItem">
+          <!--Local storage only add/remove from trolley-->
+          <a href="index.html">
+            <img class="icon topIcon" src="assets/appImages/trolleyIcon.svg" alt="Trolley button">
+            Trolley
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <!-- Search bar and main navigation container -->
+  <div class="bottomHeader">
+    <nav aria-label="main navigation">
+      <ul class="mainNav navBar">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact</a></li>
+
+      </ul>
+    </nav>
+    <form class="horizontalForm" action="" method="post" role="search">
+      <label for="searchBar" id="searchLabel">Search Products</label>
+      <input type="text" id="searchBar" name="searchBar" placeholder="Search here...">
+      <button type="submit" id="searchButton" class="primaryBttn" aria-label="Search products">Search</button>
+    </form>
+  </div>
+</header>
+<main>
+  <section id="categoriesDashboard" class="dashboardContainer">
+    <h2>Manage Categories</h2>
+    <a href="dashboard.html"><button class="secondaryBttn">⬅️ Back to Dashboard</button></a>
+    <form action="" method="post" id="selectForm">
+      <fieldset>
+        <legend>Product Categories</legend>
+        <label for="category" class="boldLabel">Category: </label>
+        <select id="category" name="category">
+          <option value="">Select Category</option>
+          <option value="brand">brand</option>
+          <option value="collection">collection</option>
+          <option value="scale">scale</option>
+          <option value="model">model</option>
+        </select>
+
+      </fieldset>
+    </form>
+
+    <button id="addCategoryBtn" class="primaryBttn">Add New Item</button>
+
+    <table id="categoriesTable">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody id="categoriesBody"></tbody>
+    </table>
+
+    <!-- Modal -->
+    <div id="addCategoryModal" class="modal hidden">
+      <div class="modal-content">
+        <h3>Add New Category</h3>
+        <form id="addCategoryForm">
+          <label for="categoryType">Type:</label>
+          <select id="categoryType" >
+            <option value="brand">Brand</option>
+            <option value="scale">Scale</option>
+            <option value="collection">Collection</option>
+            <option value="model">Model</option>
+          </select>
+          <!-- 2-column table fieldset -->
+          <fieldset id="simpleNameGroup">
+            <label for="categoryName">Name:</label>
+            <input type="text" id="categoryName" >
+          </fieldset>
+
+          <!-- Model-specific fields -->
+          <fieldset id="modelFields" class="hidden">
+            <label for="modelName">Model Name:</label>
+            <input type="text" id="modelName" >
+
+            <label for="modelBrand">Brand:</label>
+            <select id="modelBrand" ></select>
+
+            <label for="modelScale">Scale:</label>
+            <select id="modelScale" ></select>
+
+            <label for="modelCollection">Collection:</label>
+            <select id="modelCollection"></select>
+
+            <label for="modelDescription">Description (optional):</label>
+            <textarea id="modelDescription" rows="3"></textarea>
+          </fieldset>
+
+          <div class="modal-buttons">
+            <button type="button" id="cancelModalBtn">Cancel</button>
+            <button type="submit" id="saveAddBtn">Add</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+<footer>
+  <section class="footerSection" aria-label="Site Map">
+    <h3>Site Map</h3>
+    <nav id="footerNav">
+      <ul class="siteMap navBar">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </section>
+  <section class="contactLinks" aria-label="Contact Us">
+    <h3>Contact Us</h3>
+    <nav id="contactNav" aria-label="Contact Us">
+      <ul class="contacts navBar">
+        <li class="contactsNavItem iconItem">
+          <a href="https://www.instagram.com/">
+            <img class="icon contactIcon" src="assets/appImages/instagram.svg" alt="Instagram Icon">
+            Instagram
+          </a>
+        </li>
+        <li class="contactsNavItem iconItem">
+          <a href="https://www.facebook.com/">
+            <img class="icon contactIcon" src="assets/appImages/facebook.svg" alt="Facebook Icon">
+            Facebook
+          </a>
+        </li>
+        <li class="contactsNavItem iconItem">
+          <a href="mailto:example@gmail.com">
+            <img class="icon contactIcon" src="assets/appImages/mail.svg" alt="Email Icon">
+            Email
+          </a>
+        </li>
+      </ul>
+
+    </nav>
+  </section>
+
+</footer>
+</body>
+</html>

@@ -2,7 +2,7 @@
     /* ============== Colors ============== */
 
     --colour-primary: #162e6b;
-    --colour-primary-hoover: #1d3b85;
+    --colour-primary-hoover: #233d8a;
     --colour-secondary-hover: #dfdede;
     --colour-text: #1c1c1c;
     --colour-bg: #f8f9fa;
@@ -50,6 +50,13 @@
     margin-bottom: 20px;
     color: var(--colour-primary);
 }
+.card button {
+    margin: var(--space-xs) var(--space-md);
+    min-width: 160px;
+}
+.card button:hover {
+    background-color: var(--colour-secondary-hover);
+}
 
 .dashboardLinks {
     list-style: none;
@@ -64,6 +71,7 @@
 .dashboardLinks a {
     color: var(--colour-primary);
     text-decoration: none;
+    font-weight: 600;
     font-size: 1.1rem;
 }
 .dashboardLinks a:hover {
@@ -88,7 +96,7 @@
 }
 
 .modal.hidden { display: none; }
-
+.hidden { display: none; }
 .modal-content {
     background: var(--colour-light);
     padding: var(--space-md);
@@ -104,7 +112,7 @@
     margin: 15px 0 6px;
     font-weight: 600;
 }
-
+#category,
 .modal-content input,
 .modal-content select {
     width: 100%;
@@ -125,6 +133,14 @@
     padding: 12px;
 }
 /*=========== TABLES ===========*/
+#categoriesDashboard {
+    display: flex;
+    flex-direction: column;
+}
+#selectForm fieldset {
+    border: none;
+    margin: var(--space-xs) auto;
+}
 #productAdmin {
     align-items: center;
     grid-template-areas:
