@@ -40,14 +40,14 @@ try {
         $config['password'],
         $config['charset']
     );
-
+    $brandGateway = new BrandGateway($db);
+    $scaleGateway = new ScaleGateway($db);
+    $collectionGateway = new CollectionGateway($db);
+    $modelGateway = new ModelGateway($db);
+    $variantGateway = new VariantGateway($db);
     switch ($requested) {
         case "carModels":
-            $brandGateway = new BrandGateway($db);
-            $scaleGateway = new ScaleGateway($db);
-            $collectionGateway = new CollectionGateway($db);
-            $modelGateway = new ModelGateway($db);
-            $variantGateway = new VariantGateway($db);
+
             $productController = new ProductController
             (
                 $brandGateway,
@@ -66,6 +66,21 @@ try {
             $userGateway = new UserGateway($db);
             $userController = new UserController($userGateway);
             $userController->handleRequest($_SERVER["REQUEST_METHOD"], $itemId);
+            break;
+        case "categories":
+
+            $categoryController = new CategoryController(
+                $brandGateway,
+                $scaleGateway,
+                $collectionGateway,
+                $modelGateway
+            );
+
+            $categoryController->handleRequest(
+                $_SERVER["REQUEST_METHOD"],
+                $itemId,      // table name
+                $detailId     // record id
+            );
             break;
 
         default:

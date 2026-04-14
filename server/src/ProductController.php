@@ -194,6 +194,7 @@ class ProductController {
                 if ($detailId <= 0) {
                     http_response_code(400);
                     echo json_encode(["status"=>"error", "message" => "Invalid or missing product ID."]);
+                    return;
                 }
                 $data = (array)json_decode(file_get_contents("php://input"), TRUE);
                 $rows = $this->updateProduct($data, $id, $detailId);
@@ -204,8 +205,8 @@ class ProductController {
                         "rows" => $rows,
                         "data" => $data
                     ]);
-                }
-                else {
+
+                } else {
                     http_response_code(400);
                     echo json_encode([
                         "status" => "error"
@@ -269,6 +270,7 @@ class ProductController {
     private function updateProduct( array $data, string $tableName, int $currentId): int
     {
         $validator = new InputValidator($this->tableMap);
+
         $validationErrors = $validator->validateInput($tableName, $data);
         if (!empty($validationErrors)) {
             $errors = $validationErrors;

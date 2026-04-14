@@ -2,36 +2,44 @@ import { checkAuth } from './auth.js';
 const addModalBtn  = document.getElementById('addProductBtn');
 const addModal = document.getElementById('addProductModal');
 const addProductForm = document.getElementById('addProductForm')
-let allProducts = [];
+const addCancelBtn = document.getElementById('cancelAddBtn');
+const brandIdInput = document.getElementById('productBrand');
+const modelIdInput = document.getElementById('productModel');
+const variantInput = document.getElementById('productVariant');
+const scaleIdInput = document.getElementById('productScale');
+const priceInput = document.getElementById('productPrice');
+const stockInput = document.getElementById('productStock');
+const addTbody = document.getElementById('productsBody');
+const editModal = document.getElementById('editProductModal');
+const editProductForm = document.getElementById('editProductForm');
+const editCancelBtn = document.getElementById('cancelEditBtn');
+const saveEditBtn = document.getElementById('saveEditBtn');
 
-document.addEventListener('DOMContentLoaded', async () => {
-    const user = await checkAuth();
-    if (!user) {
-        alert("You must be logged in.");
-        window.location.href = "login.html";
-        return;
-    }
-    // Load brands and scales for dropdowns
-    await loadLookupData();
-    loadAllProducts();
-});
-async function loadLookupData() {
+const editVariantIdInput = document.getElementById('editVariantId');
+const editBrandInput = document.getElementById('editProductBrand');
+const editModelInput = document.getElementById('editProductModel');
+const editVariantInput = document.getElementById('editProductVariant');
+const editScaleInput = document.getElementById('editProductScale');
+const editPriceInput = document.getElementById('editProductPrice');
+const editStockInput = document.getElementById('editProductStock');
+const editSkuInput = document.getElementById('editProductSku');
+const editImagepathInput = document.getElementById('editProductImagepath');
+let allProducts = [];
+//brandIdInput productModel
+async function loadLookupData(brandSelect, scaleSelect, modelSelect) {
     try {
         // Load Brands
         const brandRes = await fetch('http://localhost/CMS-toyshop/server/carModels/brand');
         const brandData = await brandRes.json();
-        const brandSelect = document.getElementById('productBrand');
-        brandData.data.forEach(b => {
+                brandData.data.forEach(b => {
             const opt = document.createElement('option');
             opt.value = b.brand_id;
             opt.textContent = b.brand_name;
             brandSelect.appendChild(opt);
         });
-
         // Load Scales
         const scaleRes = await fetch('http://localhost/CMS-toyshop/server/carModels/scale');
         const scaleData = await scaleRes.json();
-        const scaleSelect = document.getElementById('productScale');
         scaleData.data.forEach(s => {
             const opt = document.createElement('option');
             opt.value = s.scale_id;
@@ -41,7 +49,6 @@ async function loadLookupData() {
 
         const models = await fetch('http://localhost/CMS-toyshop/server/carModels/model');
         const modelData = await models.json();
-        const modelSelect = document.getElementById('productModel');
         modelData.data.forEach(s => {
             const opt = document.createElement('option');
             opt.value = s.model_id;
@@ -59,14 +66,14 @@ async function loadAllProducts() {
         const res = await fetch('http://localhost/CMS-toyshop/server/carModels');
         const data = await res.json();
         allProducts = data.products || [];
-        renderProducts(allProducts);
+        renderProducts(allProducts, addTbody);
     } catch (e) {
         console.error(e);
     }
 }
 
-function renderProducts(products) {
-    const tbody = document.getElementById('productsBody');
+function renderProducts(products, tbody) {
+
     tbody.innerHTML = '';
 
     products.forEach(p => {
@@ -84,7 +91,8 @@ function renderProducts(products) {
 
         fields.forEach(value => {
             const td = document.createElement('td');
-            td.textContent = value;   // SAFE
+            td.textContent = value;
+            td.dataset.value = value;
             row.appendChild(td);
         });
 
@@ -108,30 +116,111 @@ function renderProducts(products) {
     });
     addActionListeners();
 }
+function addActionListeners() {
+    // Delete buttons
+    document.querySelectorAll('.deleteBtn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            if (!confirm('Delete this product?')) return;
 
+            const id = btn.dataset.id;
+            try {
+                const res = await fetch(`http://localhost/CMS-toyshop/server/carModels/variant/${id}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                });
+
+                if (res.ok) {
+                    alert("Product deleted successfully.");
+                    loadAllProducts();
+                } else {
+                    alert("Failed to delete product.");
+                }
+            } catch (e) {
+                console.error(e);
+                alert("Error deleting product.");
+            }
+        });
+    });
+
+    // Edit buttons
+    document.querySelectorAll('.editBtn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const id = parseInt(btn.dataset.id);
+            const product = allProducts.find(p => p.variant_id == id);
+
+            if (product) {
+                showEditModal(product);
+
+            } else {
+                alert("Product data not found.");
+            }
+        });
+    });
+}
 // Show Add-Product Modal
-function showAddModal(modal) {
-
+function showModal(modal, cancelButton) {
     modal.classList.remove('hidden');
     modal.removeAttribute('aria-hidden');
-    document.getElementById('addProductForm').reset();
-    document.getElementById('cancelAddBtn').addEventListener('click', ()=> {
+    addProductForm.reset();
+    cancelButton.addEventListener('click', ()=> {
         modal.classList.add('hidden');
         modal.ariaHidden = 'true';
     });
 }
+// Show Edit Modal
+function showEditModal(product) {
+    editVariantIdInput.value = product.variant_id || '';
+
+    editBrandInput.value = product.brand_id || '';
+    editModelInput.value = product.model_id || '';
+    editVariantInput.value = product.variant || '';
+    editScaleInput.value = product.scale_id || '';
+    editPriceInput.value = parseFloat(product.price || 0).toFixed(2);
+    editStockInput.value = product.stock || 0;
+    editSkuInput.value = product.sku || '';
+    editImagepathInput.value = product.imagepath || '';
+
+    editModal.classList.remove('hidden');
+    editModal.removeAttribute('aria-hidden');
+}
+
+// Close Edit Modal
+function closeEditModal() {
+    editModal.classList.add('hidden');
+    editModal.setAttribute('aria-hidden', 'true');
+    editProductForm.reset();
+}
+// Authenticate user
+document.addEventListener('DOMContentLoaded', async () => {
+    const user = await checkAuth();
+    if (!user) {
+        alert("You must be logged in.");
+        window.location.href = "login.html";
+        return;
+    }
+    // Load brands and scales for dropdowns
+    await loadLookupData(brandIdInput,scaleIdInput,modelIdInput);
+    await loadLookupData(editBrandInput, editScaleInput, editModelInput)
+    loadAllProducts();
+
+});
+// Cancel Edit Modal
+editCancelBtn.addEventListener('click', closeEditModal);
 // Show Add-Product Modal
-addModalBtn.addEventListener('click', ()=>showAddModal(addModal));
+addModalBtn.addEventListener('click', async ()=> {
+    showModal(addModal, addCancelBtn);
+
+});
 // Handle Add-Product Form submission
 addProductForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const brandId = document.getElementById('productBrand').value;
-    const modelId = document.getElementById('productModel').value;
-    const variant = document.getElementById('productVariant').value.trim();
-    const scaleId = document.getElementById('productScale').value;
-    const price = document.getElementById('productPrice').value;
-    const stock = document.getElementById('productStock').value;
+    const brandId = brandIdInput.value;
+    const modelId = modelIdInput.value;
+    const variant = variantInput.value.trim();
+    const scaleId = scaleIdInput.value;
+    const price = priceInput.value;
+    const stock = stockInput.value;
 
     if (!brandId || !modelId || !scaleId || !price) {
         alert("Please fill all required fields.");
@@ -174,41 +263,62 @@ addProductForm.addEventListener('submit', async (e) => {
         saveBtn.textContent = "Add Product";
     }
 });
-function addActionListeners() {
-    // Delete buttons
-    document.querySelectorAll('.deleteBtn').forEach(btn => {
-        btn.addEventListener('click', async () => {
-            if (!confirm('Delete this product?')) return;
+// ==================== EDIT FORM SUBMISSION ====================
+editProductForm.addEventListener('submit', async (e) => {
 
-            const id = btn.dataset.id;
-            try {
-                const res = await fetch(`http://localhost/CMS-toyshop/server/carModels/variant/${id}`, {
-                    method: 'DELETE',
-                    credentials: 'include'
-                });
+    e.preventDefault();
 
-                if (res.ok) {
-                    alert("Product deleted successfully.");
-                    loadAllProducts(); // refresh table
-                } else {
-                    alert("Failed to delete product.");
-                }
-            } catch (e) {
-                console.error(e);
-                alert("Error deleting product.");
-            }
+    const variantId = editVariantIdInput.value;
+    console.log(variantId);
+    if (!variantId) {
+        alert("Error: Variant ID missing.");
+        return;
+    }
+
+    const modelId = editModelInput.value;
+    const variant_name = editVariantInput.value.trim();
+    const price = editPriceInput.value;
+    const stock = editStockInput.value;
+    const sku = editSkuInput.value.trim();
+    const imagepath = editImagepathInput.value.trim();
+
+    if (!modelId || !price) {
+        alert("Please fill all required fields.");
+        return;
+    }
+
+    saveEditBtn.disabled = true;
+    saveEditBtn.textContent = "Saving...";
+
+    try {
+        const response = await fetch(`http://localhost/CMS-toyshop/server/carModels/variant/${variantId}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                model_id: parseInt(modelId),
+                variant: variant_name,
+                sku: sku || null,
+                price: parseFloat(price),
+                stock: parseInt(stock) || 0,
+                imagepath: imagepath || null
+            }),
+            credentials: 'include'
         });
-    });
-    document.querySelectorAll('.editBtn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const id = parseInt(btn.dataset.id);
-            const product = allProducts.find(p => p.variant_id === id);
 
-            if (product) {
-                showEditModal(product);
-            } else {
-                alert("Product data not found.");
-            }
-        });
-    });
-}
+        const result = await response.json();
+
+        if (response.ok) {
+            alert("Product updated successfully!");
+            closeEditModal();
+            loadAllProducts(); // refresh the table
+        } else {
+            alert(result.message || "Failed to update product.");
+        }
+    } catch (error) {
+        console.error(error);
+        alert("Error connecting to server.");
+    } finally {
+        saveEditBtn.disabled = false;
+        saveEditBtn.textContent = "Save Changes";
+    }
+});

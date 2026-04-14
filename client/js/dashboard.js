@@ -12,32 +12,52 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.getElementById('displayUsername').textContent = user.username;
     document.getElementById('displayEmail').textContent = user.email || 'Not provided';
+    const editProfileBtn = document.getElementById('editProfileBtn');
+    const deleteProfileBtn = document.getElementById('deleteProfileBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const card = document.querySelector('.card');
 
-    const logoutBtn = document.createElement('button');
-    logoutBtn.textContent = 'Logout';
-    logoutBtn.classList.add('secondaryBttn');
-    logoutBtn.style.marginLeft = '10px';
+    const logout = async () => {
+        try {
+            await fetch('http://localhost/CMS-toyshop/server/users/logout', {
+                method: 'POST',
+                credentials: 'include'
+            });
 
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        } catch (e) {
+            console.error(e);
+            window.location.href = 'login.html';
+        }
+    }
     logoutBtn.addEventListener('click', async () => {
         if (confirm('Are you sure you want to logout?')) {
+            await logout()
+        }
+    });
+    card.appendChild(logoutBtn);
+
+    deleteProfileBtn.addEventListener('click', async () => {
+        const user_id = user.user_id
+        console.log("user_id: " + user_id);
+        if (confirm('Are you sure you want to deletete profile?')) {
             try {
-                await fetch('http://localhost/CMS-toyshop/server/users/logout', {
-                    method: 'POST',
+                 await fetch(`http://localhost/CMS-toyshop/server/users/${user_id}`, {
+                    method: 'DELETE',
                     credentials: 'include'
                 });
+
                 localStorage.removeItem('currentUser');
-                window.location.href = 'login.html';
+                logout();
             } catch (e) {
                 console.error(e);
                 window.location.href = 'login.html';
             }
         }
-    });
+    })
 
-    const card = document.querySelector('.card');
-    card.appendChild(logoutBtn);
-
-    document.getElementById('editProfileBtn').addEventListener('click', () => {
+    editProfileBtn.addEventListener('click', () => {
         alert("Profile editing feature coming soon!");
     });
 });

@@ -66,6 +66,9 @@
     text-decoration: none;
     font-size: 1.1rem;
 }
+.dashboardLinks a:hover {
+    color: var(--colour-primary-hoover);
+}
 
 .userInfo {
     display: flex;
@@ -87,9 +90,9 @@
 .modal.hidden { display: none; }
 
 .modal-content {
-    background: white;
-    padding: 30px;
-    border-radius: 12px;
+    background: var(--colour-light);
+    padding: var(--space-md);
+    border-radius: 8px;
     width: 90%;
     max-width: 420px;
     max-height: 90vh;
@@ -166,8 +169,9 @@ td:first-child, th:first-child {
     border: none;
 
 }
+
 .deleteBtn {
-    background: var(--colour-light);
+    background-color: var(--colour-light);
     border: 1px solid var(--colour-primary);
 }
 .editBtn, .deleteBtn {

@@ -157,17 +157,17 @@ registerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     // Clean and prepare values for post
-    const trimmedUsername = username.value.trim();
+    const value = username.value.trim();
     const trimmedEmail = email.value.trim();
     const passwordValue = passwordInput.value;
     const confirmValue = confirmInput.value;
     //Validate again and return if not pass
-    if (usernameRegex.test(trimmedUsername)) {
-        alert('Username can only contain letters, numbers, and underscores');
+    if (!usernameRegex.test(value)) {
+        alert(' Username can only contain letters, numbers, and underscores');
         return;
     }
 
-    if (trimmedUsername.length < 3) {
+    if (value.length < 3) {
         alert("Username must be at least 3 characters long.");
         return;
     }
@@ -198,7 +198,7 @@ registerForm.addEventListener('submit', async (e) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                username: trimmedUsername,
+                username: value,
                 email: trimmedEmail,
                 password: passwordValue
             })

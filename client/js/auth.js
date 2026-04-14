@@ -6,8 +6,6 @@ export async function checkAuth() {
             cache: 'no-store'
         });
 
-        console.log('ME status:', response.status);
-
         if (!response.ok) return null;
 
         const result = await response.json();

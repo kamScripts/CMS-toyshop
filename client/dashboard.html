@@ -8,6 +8,7 @@
     <title>BestCarsProject-Dashboard</title>
     <script src="js/headerSearch.js" defer></script>
     <script type="module" src="js/dashboard.js" defer></script>
+
 </head>
 <body>
 <header>
@@ -66,15 +67,16 @@
         <h2>Welcome to Your Dashboard</h2>
         <div class="dashboardGrid">
             <!-- User Account Section -->
-            <div class="card">
+            <article class="card">
                 <h3>Account Information</h3>
                 <div id="userProfile">
                     <p><strong>Username:</strong> <span id="displayUsername"></span></p>
                     <p><strong>Email:</strong> <span id="displayEmail"></span></p>
                 </div>
-
-                <button id="editProfileBtn" class="primaryBttn">Edit Profile</button>
-            </div>
+                <button id="editProfileBtn" class="secondaryBttn">Edit Profile</button>
+                <button id="deleteProfileBtn" class="secondaryBttn error">Delete Profile</button>
+                <button id="logoutBtn" class="secondaryBttn">Logout</button>
+            </article>
 
             <!-- Quick Links -->
             <div class="card">

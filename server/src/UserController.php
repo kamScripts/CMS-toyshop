@@ -284,6 +284,13 @@ class UserController {
                     "userId" => $id,
                 ]);
                 return;
+            } else {
+                http_response_code(500);
+                echo json_encode([
+                    "status" => "error",
+                    "message" => "Failed to delete user.",
+                    "userId" => $id,
+                ]);
             }
         } catch (PDOException $e) {
             http_response_code(500);

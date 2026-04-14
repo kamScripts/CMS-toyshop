@@ -49,7 +49,6 @@ CREATE TABLE variant (
   variant VARCHAR(20),
   sku VARCHAR(12) UNIQUE,
   price DECIMAL(5,2),
-  
   stock INT,
   imagepath VARCHAR(100),
   PRIMARY KEY (variant_id),

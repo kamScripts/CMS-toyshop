@@ -74,13 +74,18 @@ class VariantGateway
     }
     public function update(int $currentId, array $new): int {
         $current = $this->get($currentId);
-        $sql = "UPDATE variant 
-                SET variant_name = model_id = :model_id, variant = :variant,
-                sku = :sku, price = :price, stock = :stock, imagepath = :imagepath
+        $sql = "UPDATE variant
+                SET variant = :variant, model_id = :model_id, sku = :sku,
+                    price = :price, stock = :stock, imagepath = :imagepath
                 WHERE variant_id = :id";
         $stmt = $this->pdo->prepare($sql);
-
+        $stmt->bindValue("variant", $new['variant']  ?? $current['variant'], PDO::PARAM_STR);
+        $stmt->bindValue("model_id", $new['model_id']  ?? $current['model_id'], PDO::PARAM_INT);
+        $stmt->bindValue("sku", $new['sku'] ?? $current['sku'], PDO::PARAM_STR);
         $stmt->bindValue(":id", $current["variant_id"], PDO::PARAM_INT);
+        $stmt->bindValue(":price", $new['price']    ?? $current['price'], PDO::PARAM_STR);
+        $stmt->bindValue(":stock", $new['stock']    ?? $current['stock'], PDO::PARAM_INT);
+        $stmt->bindValue(":imagepath", $new['imagepath'] ?? $current['imagepath'], PDO::PARAM_STR);
         $stmt->execute();
 
         return $stmt->rowCount();
