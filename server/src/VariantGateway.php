@@ -63,12 +63,12 @@ class VariantGateway
         $sql = "INSERT INTO variant ( model_id, variant, sku, price, stock,imagepath)
                 VALUES (:model_id, :variant, :sku, :price, :stock, :imagepath)";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(":model_id", $data["model_id"], PDO::PARAM_INT);
-        $stmt->bindValue(":variant", $data["variant"], PDO::PARAM_STR);
-        $stmt->bindValue(":sku", $data["sku"], PDO::PARAM_STR);
-        $stmt->bindValue(":price", $data["price"], PDO::PARAM_STR);
-        $stmt->bindValue(":stock", $data["stock"], PDO::PARAM_INT);
-        $stmt->bindValue(":imagepath", $data["imagepath"], PDO::PARAM_STR);
+        $stmt->bindValue(":model_id",  $data['model_id']  ?? null, PDO::PARAM_INT);
+        $stmt->bindValue(":variant",   $data['variant']   ?? null, PDO::PARAM_STR);
+        $stmt->bindValue(":sku",       $data['sku']       ?? null, PDO::PARAM_STR);     // or generate SKU
+        $stmt->bindValue(":price",     $data['price']     ?? 0,    PDO::PARAM_STR);
+        $stmt->bindValue(":stock",     $data['stock']     ?? 0,    PDO::PARAM_INT);
+        $stmt->bindValue(":imagepath", $data['imagepath'] ?? 'placeholder.png', PDO::PARAM_STR);
         $stmt->execute();
         return $this->pdo->lastInsertId();
     }

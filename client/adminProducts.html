@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="dashboard.css">
+  <title>BestCarsProject</title>
+  <script src="js/headerSearch.js" defer></script>
+  <script type="module" src="js/auth.js" defer></script>
+  <script type="module" src="js/adminProducts.js" defer></script>
+</head>
+<body>
+<header>
+  <!--Logo, heading, and user navigation-->
+  <div class="topHeader">
+    <a href="index.html" class="logoLink">
+      <img id="logo" src="assets/appImages/logoMinimal.png" alt="Best Cars Models Logo">
+    </a>
+    <h1>BestCarToys Online Shop</h1>
+    <nav aria-label="User navigation">
+      <ul class="userNav navBar">
+        <!-- Sign-in/Sign-up-->
+        <li class="userNavItem iconItem">
+          <a href="login.html">
+            <img class="icon topIcon" src="assets/appImages/userIcon.svg" alt="User Icon">
+            Account
+          </a>
+        </li>
+        <li class="userNavItem iconItem">
+          <!--Make a popup with info about project-->
+          <a href="index.html">
+            <img class="icon topIcon" src="assets/appImages/info.svg" alt="Info Icon">
+            Info
+          </a>
+        </li>
+        <li class="userNavItem iconItem">
+          <!--Local storage only add/remove from trolley-->
+          <a href="index.html">
+            <img class="icon topIcon" src="assets/appImages/trolleyIcon.svg" alt="Trolley Icon">
+            Trolley
+          </a>
+        </li>
+        <li class="userNavItem iconItem">
+          <button id="logoutBtn" class="secondaryBttn">Logout</button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <!-- Search bar and main navigation container -->
+  <div class="bottomHeader">
+    <nav aria-label="main navigation">
+      <ul class="mainNav navBar">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <form class="horizontalForm" action="" method="post" role="search">
+      <label for="searchBar" id="searchLabel">Search Products</label>
+      <input type="text" id="searchBar" name="searchBar" placeholder="Search here...">
+      <button type="submit" id="searchButton" class="primaryBttn" aria-label="Search products">Search</button>
+    </form>
+  </div>
+</header>
+<main>
+  <section id="productAdmin" class="mainContainer">
+    <h2 id="area1">Manage Products</h2>
+
+    <div class="adminActions">
+      <button id="addProductBtn" class="primaryBttn">+ Add New Product</button>
+    </div>
+
+    <!-- Products Table -->
+    <table id="productsTable" class="adminTable">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Brand</th>
+        <th>Model</th>
+        <th>Variant</th>
+        <th>Scale</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody id="productsBody">
+
+      </tbody>
+    </table>
+  </section>
+  <div id="addProductModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-content">
+      <h3>Add New Product</h3>
+
+      <form id="addProductForm">
+        <label for="productBrand">Brand</label>
+        <select id="productBrand" required>
+          <option value="">Select Brand</option>
+        </select>
+
+        <label for="productModel">Model Name</label>
+        <select id="productModel" required>
+          <option value="">Select Model</option>
+        </select>
+
+        <label for="productVariant">Variant</label>
+        <input type="text" id="productVariant" placeholder="e.g. Spider, Coupe">
+
+        <label for="productScale">Scale</label>
+        <select id="productScale" required>
+          <option value="">Select Scale</option>
+        </select>
+
+        <label for="productPrice">Price ($)</label>
+        <input type="number" id="productPrice" step="0.01" required>
+
+        <label for="productStock">Stock Quantity</label>
+        <input type="number" id="productStock" value="10" required>
+
+        <div class="modal-buttons">
+          <button type="button" id="cancelAddBtn" class="secondaryBttn">Cancel</button>
+          <button type="submit" id="saveAddBtn" class="primaryBttn">Add Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div id="editProductModal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Edit Product Variant</h2>
+
+      <form id="editProductForm">
+        <input type="hidden" id="editVariantId">
+
+        <label>Brand:</label>
+        <select id="editProductBrand" required></select>
+
+        <label>Model:</label>
+        <select id="editProductModel" required></select>
+
+        <label>Variant Name:</label>
+        <input type="text" id="editProductVariant" placeholder="e.g. Red Limited Edition">
+
+        <label>Scale:</label>
+        <select id="editProductScale" required></select>
+
+        <label>Price ($):</label>
+        <input type="number" step="0.01" id="editProductPrice" required>
+
+        <label>Stock:</label>
+        <input type="number" id="editProductStock" required>
+
+        <label>SKU:</label>
+        <input type="text" id="editProductSku">
+
+        <label>Image Path:</label>
+        <input type="text" id="editProductImagepath" placeholder="/uploads/toy-123.jpg">
+
+        <div class="modal-buttons">
+          <button type="button" id="cancelEditBtn">Cancel</button>
+          <button type="submit" id="saveEditBtn">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+<footer>
+  <section class="footerSection" aria-label="Site Map">
+    <h3>Site Map</h3>
+    <nav id="footerNav">
+      <ul class="siteMap navBar">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </section>
+  <section class="contactLinks" aria-label="Contact Us">
+    <h3>Contact Us</h3>
+    <nav id="contactNav" aria-label="Contact Us">
+      <ul class="contacts navBar">
+        <li class="contactsNavItem iconItem">
+          <a href="https://www.instagram.com/">
+            <img class="icon contactIcon" src="assets/appImages/instagram.svg" alt="Instagram Icon">
+            Instagram
+          </a>
+        </li>
+        <li class="contactsNavItem iconItem">
+          <a href="https://www.facebook.com/">
+            <img class="icon contactIcon" src="assets/appImages/facebook.svg" alt="Facebook Icon">
+            Facebook
+          </a>
+        </li>
+        <li class="contactsNavItem iconItem">
+          <a href="mailto:example@gmail.com">
+            <img class="icon contactIcon" src="assets/appImages/mail.svg" alt="Email Icon">
+            Email
+          </a>
+        </li>
+      </ul>
+
+    </nav>
+  </section>
+
+</footer>
+</body>
+</html>

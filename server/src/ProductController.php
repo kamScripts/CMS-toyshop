@@ -165,7 +165,7 @@ class ProductController {
                 if ($result>0) {
                     echo json_encode([
                         "status" => "success",
-                        "message" => " item with index $result successfully inserted."
+                        "message" => "item with index $result successfully inserted."
                     ]);
                 }
                 else {
