@@ -73,9 +73,11 @@
     text-decoration: none;
     font-weight: 600;
     font-size: 1.1rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+
 }
 .dashboardLinks a:hover {
-    color: var(--colour-primary-hoover);
+    color: var(--colour-accent);
 }
 
 .userInfo {
@@ -169,7 +171,6 @@ th, td {
     border-right: 1px solid var(--colour-primary);
     gap: 0;
 }
-
 td:first-child, th:first-child {
     border-left: 1px solid var(--colour-primary);
 }
@@ -177,15 +178,12 @@ td:first-child, th:first-child {
     display: flex;
     align-items: center;
     gap: var(--space-md);
-
 }
 .editBtn {
     background-color: var(--colour-primary);
     color: var(--colour-light);
     border: none;
-
 }
-
 .deleteBtn {
     background-color: var(--colour-light);
     border: 1px solid var(--colour-primary);
@@ -203,5 +201,3 @@ td:first-child, th:first-child {
     background-color: var(--colour-primary-hoover) ;
     cursor: pointer;
 }
-
-

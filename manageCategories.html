@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="dashboard.css">
+  <link rel="icon" href="/favicon.png" type="image/png">
   <title>BestCarsProject-Manage-categories</title>
+  <script type="module" src="js/config.js" defer></script>
   <script type="module" src="js/manageCategories.js"></script>
 
 </head>
@@ -28,14 +30,14 @@
         </li>
         <li class="userNavItem iconItem">
           <!--Make a popup with info about project-->
-          <a href="index.html">
+          <a href="index.html" class="unavailable">
             <img class="icon topIcon" src="assets/appImages/info.svg" alt="Info button">
             Info
           </a>
         </li>
         <li class="userNavItem iconItem">
           <!--Local storage only add/remove from trolley-->
-          <a href="index.html">
+          <a href="index.html" class="unavailable">
             <img class="icon topIcon" src="assets/appImages/trolleyIcon.svg" alt="Trolley button">
             Trolley
           </a>
@@ -54,7 +56,7 @@
 
       </ul>
     </nav>
-    <form class="horizontalForm" action="" method="post" role="search">
+    <form class="horizontalForm" method="post" role="search">
       <label for="searchBar" id="searchLabel">Search Products</label>
       <input type="text" id="searchBar" name="searchBar" placeholder="Search here...">
       <button type="submit" id="searchButton" class="primaryBttn" aria-label="Search products">Search</button>
@@ -65,7 +67,7 @@
   <section id="categoriesDashboard" class="dashboardContainer">
     <h2>Manage Categories</h2>
     <a href="dashboard.html"><button class="secondaryBttn">⬅️ Back to Dashboard</button></a>
-    <form action="" method="post" id="selectForm">
+    <form method="post" id="selectForm">
       <fieldset>
         <legend>Product Categories</legend>
         <label for="category" class="boldLabel">Category: </label>
@@ -82,7 +84,7 @@
 
     <button id="addCategoryBtn" class="primaryBttn">Add New Item</button>
 
-    <table id="categoriesTable">
+    <table id="categoriesTable" aria-label="categoriesTable">
       <thead>
       <tr>
         <th>ID</th>

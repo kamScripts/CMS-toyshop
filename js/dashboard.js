@@ -1,6 +1,6 @@
 
 import { checkAuth } from './auth.js';
-
+import CONFIG from './config.js';
 document.addEventListener('DOMContentLoaded', async () => {
 
     const user = await checkAuth();
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const logout = async () => {
         try {
-            await fetch('http://localhost/CMS-toyshop/server/users/logout', {
+            await fetch(CONFIG.API_BASE+'users/logout', {
                 method: 'POST',
                 credentials: 'include'
             });
@@ -41,9 +41,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     deleteProfileBtn.addEventListener('click', async () => {
         const user_id = user.user_id
         console.log("user_id: " + user_id);
-        if (confirm('Are you sure you want to deletete profile?')) {
+        if (confirm('Are you sure you want to delete profile?')) {
             try {
-                 await fetch(`http://localhost/CMS-toyshop/server/users/${user_id}`, {
+                 await fetch(CONFIG.API_BASE+`users/${user_id}`, {
                     method: 'DELETE',
                     credentials: 'include'
                 });

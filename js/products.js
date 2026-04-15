@@ -1,3 +1,4 @@
+import CONFIG    from "./config.js";
 const filtersForm = document.querySelector('#filtersForm');
 // filter buttons
 const applyButton = document.querySelector('#applyFilters');
@@ -13,7 +14,7 @@ const maxPriceInput = document.querySelector('#maxPrice');
 const productCount = document.querySelector('#productCount');
 const productGrid = document.querySelector('#productsGrid');
 const loading = document.querySelector('#loading');
-const URL = 'http://localhost/CMS-toyshop/server/carModels';
+const URL = CONFIG.API_BASE+'carModels';
 
 let allProducts = [];
 
@@ -158,7 +159,7 @@ const renderProducts = (productsToShow) => {
         img.classList.add('cardImage');
 
         const title = document.createElement('h3');
-        title.textContent = `${brand_name} ${model_name} ${variant || ''}`.trim();
+        title.textContent = `${model_name} ${variant || ''}`.trim();
 
         const desc = document.createElement('p');
         desc.textContent = description || 'No description available';
@@ -173,10 +174,14 @@ const renderProducts = (productsToShow) => {
         const addBtn = document.createElement('button');
         addBtn.textContent = 'Add to trolley';
         addBtn.classList.add('primaryBttn');
+        addBtn.classList.add('unavailable');
+        addBtn.disabled = true;
 
         const viewBtn = document.createElement('button');
         viewBtn.textContent = 'View details';
         viewBtn.classList.add('secondaryBttn');
+        viewBtn.classList.add('unavailable');
+        viewBtn.disabled = true;
 
         btnContainer.append(addBtn, viewBtn);
 

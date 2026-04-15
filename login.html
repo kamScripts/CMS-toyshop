@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="dashboard.css">
-    <title>BestCarsProject-Dashboard</title>
+    <link rel="icon" href="/favicon.png" type="image/png">
+    <title>BestCarsProject login</title>
     <script src="js/headerSearch.js" defer></script>
-    <script type="module" src="js/dashboard.js" defer></script>
-
+    <script type="module" src="js/config.js" defer></script>
+    <script type="module" src="js/login.js" defer></script>
 </head>
 <body>
 <header>
@@ -23,21 +23,21 @@
                 <!-- Sign-in/Sign-up-->
                 <li class="userNavItem iconItem">
                     <a href="login.html">
-                        <img class="icon topIcon" src="assets/appImages/userIcon.svg" alt="Account button">
+                        <img class="icon topIcon" src="assets/appImages/userIcon.svg" alt="User Icon">
                         Account
                     </a>
                 </li>
                 <li class="userNavItem iconItem">
                     <!--Make a popup with info about project-->
-                    <a href="index.html">
-                        <img class="icon topIcon" src="assets/appImages/info.svg" alt="Info button">
+                    <a href="index.html" class="unavailable">
+                        <img class="icon topIcon" src="assets/appImages/info.svg" alt="Info Icon">
                         Info
                     </a>
                 </li>
                 <li class="userNavItem iconItem">
                     <!--Local storage only add/remove from trolley-->
-                    <a href="index.html">
-                        <img class="icon topIcon" src="assets/appImages/trolleyIcon.svg" alt="Trolley button">
+                    <a href="index.html" class="unavailable">
+                        <img class="icon topIcon" src="assets/appImages/trolleyIcon.svg" alt="Trolley Icon">
                         Trolley
                     </a>
                 </li>
@@ -55,39 +55,31 @@
 
             </ul>
         </nav>
-        <form class="horizontalForm" action="" method="post" role="search">
+        <form class="horizontalForm" method="post" role="search">
             <label for="searchBar" id="searchLabel">Search Products</label>
             <input type="text" id="searchBar" name="searchBar" placeholder="Search here...">
-            <button type="submit" id="searchButton" class="primaryBttn" aria-label="Search products">Search</button>
+            <button type="submit" class="primaryBttn" aria-label="Search products">Search</button>
         </form>
     </div>
 </header>
-<main>
-    <section class="dashboardContainer">
-        <h2>Welcome to Your Dashboard</h2>
-        <div class="dashboardGrid">
-            <!-- User Account Section -->
-            <article class="card">
-                <h3>Account Information</h3>
-                <div id="userProfile">
-                    <p><strong>Username:</strong> <span id="displayUsername"></span></p>
-                    <p><strong>Email:</strong> <span id="displayEmail"></span></p>
-                </div>
-                <button id="editProfileBtn" class="secondaryBttn">Edit Profile</button>
-                <button id="deleteProfileBtn" class="secondaryBttn error">Delete Profile</button>
-                <button id="logoutBtn" class="secondaryBttn">Logout</button>
-            </article>
-
-            <!-- Quick Links -->
-            <div class="card">
-                <h3>Quick Actions</h3>
-                <ul class="dashboardLinks">
-                    <li><a href="adminProducts.html">Manage Products</a></li>
-                    <li><a href="#">Manage Products images</a></li>
-                    <li><a href="manageCategories.html">Manage Categories</a></li>
-                    <li><a href="#">View messages from users </a></li>
-                </ul>
-            </div>
+<main id="loginMain">
+    <section id="loginSection" class="mainContainer">
+        <h2>Log in</h2>
+        <div class="loginContainer">
+        <form id="loginForm" class="membersForm" role="form">
+            <fieldset>
+                <legend>Sign in</legend>
+                <label class="boldLabel" for="username">Username</label>
+                <input class="membersInput" type="text" id="username" name="username" placeholder="Enter Username" required>
+                <label class="boldLabel" for="password">Password</label>
+                <input class="membersInput" type="password" id="password" name="password" placeholder="Enter Password" required>
+                <p id="loginError" class="errorMessage"></p>
+                <button type="submit" id="loginBtn" class="primaryBttn" aria-label="Login">Sign in</button>
+            </fieldset>
+        </form>
+        <a href="register.html" class="secondaryBttn">
+            Register
+        </a>
         </div>
     </section>
 </main>

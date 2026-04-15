@@ -4,9 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
-  <title>BestCarsProject register</title>
-  <script src="js/headerSearch.js" defer></script>
-  <script src="js/register.js" defer></script>
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <title>BestCarsProject-Manage-categories</title>
+  <script type="module" src="js/config.js" defer></script>
+  <script type="module" src="js/manageImages.js"></script>
+
 </head>
 <body>
 <header>
@@ -21,21 +24,21 @@
         <!-- Sign-in/Sign-up-->
         <li class="userNavItem iconItem">
           <a href="login.html">
-            <img class="icon topIcon" src="assets/appImages/userIcon.svg" alt="User Icon">
+            <img class="icon topIcon" src="assets/appImages/userIcon.svg" alt="Account button">
             Account
           </a>
         </li>
         <li class="userNavItem iconItem">
           <!--Make a popup with info about project-->
-          <a href="index.html">
-            <img class="icon topIcon" src="assets/appImages/info.svg" alt="Info Icon">
+          <a href="index.html" class="unavailable">
+            <img class="icon topIcon" src="assets/appImages/info.svg" alt="Info button">
             Info
           </a>
         </li>
         <li class="userNavItem iconItem">
           <!--Local storage only add/remove from trolley-->
-          <a href="index.html">
-            <img class="icon topIcon" src="assets/appImages/trolleyIcon.svg" alt="Trolley Icon">
+          <a href="index.html" class="unavailable">
+            <img class="icon topIcon" src="assets/appImages/trolleyIcon.svg" alt="Trolley button">
             Trolley
           </a>
         </li>
@@ -53,46 +56,50 @@
 
       </ul>
     </nav>
-    <form class="horizontalForm" action="" method="post" role="search">
+    <form class="horizontalForm" method="post" role="search">
       <label for="searchBar" id="searchLabel">Search Products</label>
       <input type="text" id="searchBar" name="searchBar" placeholder="Search here...">
-      <button type="submit" class="primaryBttn" aria-label="Search products">Search</button>
+      <button type="submit" id="searchButton" class="primaryBttn" aria-label="Search products">Search</button>
     </form>
   </div>
 </header>
-<main id="regMain">
-  <section id="regSection" class="mainContainer">
-    <h2>Register</h2>
-    <div class="loginContainer">
+<main>
+  <section id="imgDashboard" class="dashboardContainer">
+    <h2>Manage Product Images</h2>
+    <a href="dashboard.html" class="secondaryBttn">⬅️ Back to Dashboard</a>
+    <button id="uploadImageBtn" class="primaryBttn">Upload New Image</button>
+    <button id="refreshBtn" class="secondaryBttn">Refresh Image List</button>
 
-      <form id="registerForm" class="membersForm">
-        <fieldset>
-          <legend>Sign up</legend>
-          <label class="boldLabel" for="regUsername">Username</label>
-          <input class="membersInput" type="text" id="regUsername" name="username" placeholder="Enter Username" required>
-          <p id="usernameConstraints"></p>
-          <p id="usernameError"></p>
-
-          <label class="boldLabel" for="regEmail">Email</label>
-          <input class="membersInput" type="email" id="regEmail" name="email" placeholder="Enter Email" required>
-          <label class="boldLabel" for="regPassword">Password</label>
-          <input class="membersInput" type="password" id="regPassword" name="password" placeholder="Enter Password" required>
-          <div id="passwordStrength" class="password-strength">
-            <p id="passwordMessage" class="constraint-message"></p>
-            <div class="strength-bars">
-              <div id="strengthBar" class="strength-bar"></div>
-            </div>
-          </div>
-          <label class="boldLabel" for="confirmPassword">Confirm Password</label>
-          <input class="membersInput" type="password" id="confirmPassword" name="password" placeholder="Confirm Password" required>
-          <p id="passwordConstraints"></p>
-          <p id="confirmError" class="error-message"></p>
-          <button id="registerBtn" type="submit" class="primaryBttn" aria-label="Login">Register</button>
-        </fieldset>
-      </form>
-    </div>
+    <table id="imagesTable">
+      <thead>
+      <tr>
+        <th>Image</th>
+        <th>Filename</th>
+        <th>Size</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody id="imagesBody"></tbody>
+    </table>
   </section>
 </main>
+
+<!-- Upload Modal -->
+<div id="uploadModal" class="modal hidden">
+  <div class="modal-content">
+    <h2>Upload New Product Image</h2>
+
+    <form id="uploadForm" enctype="multipart/form-data">
+      <label>Select Image (jpg, png):</label>
+      <input type="file" id="imageFile" accept="image/jpeg,image/png" required>
+
+      <div class="modal-buttons">
+        <button type="button" id="cancelUploadBtn">Cancel</button>
+        <button type="submit" id="uploadBtn">Upload</button>
+      </div>
+    </form>
+  </div>
+</div>
 <footer>
   <section class="footerSection" aria-label="Site Map">
     <h3>Site Map</h3>
@@ -100,9 +107,8 @@
       <ul class="siteMap navBar">
         <li><a href="index.html">Home</a></li>
         <li><a href="products.html">Products</a></li>
-        <li><a href="aboutUs.html">About Us</a></li>
-        <li><a href="contactUs.html">Contact</a></li>
-        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact</a></li>
       </ul>
     </nav>
   </section>

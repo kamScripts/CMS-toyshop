@@ -1,5 +1,5 @@
-import { checkAuth } from './auth.js';
-
+import { checkAuth } from "./auth.js";
+import CONFIG from "./config.js";
 const selectForm = document.getElementById('category');
 const categoryType = document.getElementById('categoryType');
 const categoryName = document.getElementById('categoryName');
@@ -14,6 +14,7 @@ const newRecordBtn = document.getElementById('addCategoryBtn');
 const modalForm = document.getElementById('addCategoryForm');
 const cancelModalBtn = document.getElementById('cancelModalBtn');
 const catBody = document.getElementById('categoriesBody');
+const modal = document.getElementById('addCategoryModal');
 let currentType = '';
 
 
@@ -53,17 +54,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function loadAllCategories(type) {
     currentType = type || 'brand';
     try {
-        const res = await fetch(`http://localhost/CMS-toyshop/server/categories/${currentType}`);
+        const res = await fetch(CONFIG.API_BASE + `categories/${currentType}`);
         const data = await res.json();
 
         if (data.status === "success") {
             renderCategories(data.data, currentType);
+        } else {
+            console.error("API Error:", data);
         }
     } catch (e) {
-        console.error("Load error:", e);
+        console.error("Load categories error:", e);
     }
 }
-
+// ==================== Render table content ====================
 function renderCategories(items, type) {
     const tbody = catBody;
     tbody.innerHTML = '';
@@ -73,14 +76,29 @@ function renderCategories(items, type) {
         const nameField = Object.keys(item)[1];
 
         const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${item[idField]}</td>
-            <td>${type}</td>
-            <td>${item[nameField] || '-'}</td>
-            <td>
-                <button class="deleteBtn" data-id="${item[idField]}" data-type="${type}">Delete</button>
-            </td>
-        `;
+
+        // ID cell
+        const tdId = document.createElement('td');
+        tdId.textContent = item[idField];
+
+        // Type cell
+        const tdType = document.createElement('td');
+        tdType.textContent = type;
+
+        // Name cell
+        const tdName = document.createElement('td');
+        tdName.textContent = item[nameField] || '-';
+
+        // Actions cell
+        const tdActions = document.createElement('td');
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'deleteBtn';
+        deleteBtn.dataset.id = item[idField];
+        deleteBtn.dataset.type = type;
+        deleteBtn.textContent = 'Delete';
+
+        tdActions.appendChild(deleteBtn);
+        row.append(tdId,tdType,tdName,tdActions);
         tbody.appendChild(row);
     });
     addDeleteListeners();
@@ -88,10 +106,7 @@ function renderCategories(items, type) {
 // ==================== MODAL ====================
 
 function showAddModal() {
-    const modal = document.getElementById('addCategoryModal');
-    const form = document.getElementById('addCategoryForm');
-
-    form.reset();
+    modalForm.reset();
     modal.classList.remove('hidden');
 
     // Set the modal type select to match current table
@@ -100,7 +115,7 @@ function showAddModal() {
 }
 
 function closeAddModal() {
-    document.getElementById('addCategoryModal').classList.add('hidden');
+    modal.classList.add('hidden');
 }
 
 function toggleModelFields() {
@@ -121,9 +136,9 @@ function toggleModelFields() {
 async function loadModelDropdowns() {
     try {
         const [brandRes, scaleRes, collRes] = await Promise.all([
-            fetch('http://localhost/CMS-toyshop/server/categories/brand'),
-            fetch('http://localhost/CMS-toyshop/server/categories/scale'),
-            fetch('http://localhost/CMS-toyshop/server/categories/collection')
+            fetch(CONFIG.API_BASE + 'categories/brand'),
+            fetch(CONFIG.API_BASE + 'categories/scale'),
+            fetch(CONFIG.API_BASE + 'categories/collection')
         ]);
 
         const brandData = await brandRes.json();
@@ -156,7 +171,7 @@ async function handleAddSubmit(e) {
 
     const type = categoryType.value;
     let bodyData = {};
-
+    //Data to create Model record
     if (type === 'model') {
         bodyData = {
             model_name: modelName.value.trim(),
@@ -166,7 +181,7 @@ async function handleAddSubmit(e) {
                 parseInt(modelCollection.value) : null,
             description: modelDesc.value.trim() || null
         };
-    } else {
+    } else { //Data to create any small 2 column table ({table}_id, name)
         bodyData = {
             [`${type}_name`]: categoryName.value.trim()
         };
@@ -182,7 +197,7 @@ async function handleAddSubmit(e) {
     saveBtn.textContent = "Adding...";
 
     try {
-        const response = await fetch(`http://localhost/CMS-toyshop/server/categories/${type}`, {
+        const response = await fetch(CONFIG.API_BASE+`categories/${type}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(bodyData),
@@ -199,7 +214,6 @@ async function handleAddSubmit(e) {
             alert(result.message || "Failed to add.");
         }
     } catch (err) {
-        console.error(err);
         alert("Error connecting to server.");
     } finally {
         saveBtn.disabled = false;
@@ -207,7 +221,7 @@ async function handleAddSubmit(e) {
     }
 }
 
-// ==================== DELETE ====================
+// ==================== DELETE RECORD ====================
 
 function addDeleteListeners() {
     document.querySelectorAll('.deleteBtn').forEach(btn => {
@@ -218,7 +232,7 @@ function addDeleteListeners() {
             const type = btn.dataset.type;
 
             try {
-                const res = await fetch(`http://localhost/CMS-toyshop/server/categories/${type}/${id}`, {
+                const res = await fetch(CONFIG.API_BASE+`categories/${type}/${id}`, {
                     method: 'DELETE',
                     credentials: 'include'
                 });
@@ -230,7 +244,7 @@ function addDeleteListeners() {
                     alert("Failed to delete.");
                 }
             } catch (e) {
-                console.error(e);
+                alert("Error while deleting");
             }
         });
     });

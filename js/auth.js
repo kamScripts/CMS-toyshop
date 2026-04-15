@@ -1,6 +1,7 @@
+import CONFIG from "./config.js";
 export async function checkAuth() {
     try {
-        const response = await fetch('http://localhost/CMS-toyshop/server/users/me', {
+        const response = await fetch(CONFIG.API_BASE+'users/me', {
             method: 'GET',
             credentials: 'include',
             cache: 'no-store'

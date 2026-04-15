@@ -1,4 +1,5 @@
 import { checkAuth } from './auth.js';
+import CONFIG from './config.js';
 const addModalBtn  = document.getElementById('addProductBtn');
 const addModal = document.getElementById('addProductModal');
 const addProductForm = document.getElementById('addProductForm')
@@ -24,12 +25,14 @@ const editPriceInput = document.getElementById('editProductPrice');
 const editStockInput = document.getElementById('editProductStock');
 const editSkuInput = document.getElementById('editProductSku');
 const editImagepathInput = document.getElementById('editProductImagepath');
+
+
 let allProducts = [];
 //brandIdInput productModel
 async function loadLookupData(brandSelect, scaleSelect, modelSelect) {
     try {
         // Load Brands
-        const brandRes = await fetch('http://localhost/CMS-toyshop/server/carModels/brand');
+        const brandRes = await fetch(   CONFIG.API_BASE+'carModels/brand');
         const brandData = await brandRes.json();
                 brandData.data.forEach(b => {
             const opt = document.createElement('option');
@@ -38,7 +41,7 @@ async function loadLookupData(brandSelect, scaleSelect, modelSelect) {
             brandSelect.appendChild(opt);
         });
         // Load Scales
-        const scaleRes = await fetch('http://localhost/CMS-toyshop/server/carModels/scale');
+        const scaleRes = await fetch(CONFIG.API_BASE+'carModels/scale');
         const scaleData = await scaleRes.json();
         scaleData.data.forEach(s => {
             const opt = document.createElement('option');
@@ -47,7 +50,7 @@ async function loadLookupData(brandSelect, scaleSelect, modelSelect) {
             scaleSelect.appendChild(opt);
         });
 
-        const models = await fetch('http://localhost/CMS-toyshop/server/carModels/model');
+        const models = await fetch(CONFIG.API_BASE+'carModels/model');
         const modelData = await models.json();
         modelData.data.forEach(s => {
             const opt = document.createElement('option');
@@ -63,7 +66,7 @@ async function loadLookupData(brandSelect, scaleSelect, modelSelect) {
 
 async function loadAllProducts() {
     try {
-        const res = await fetch('http://localhost/CMS-toyshop/server/carModels');
+        const res = await fetch(CONFIG.API_BASE+'carModels');
         const data = await res.json();
         allProducts = data.products || [];
         renderProducts(allProducts, addTbody);
@@ -124,7 +127,7 @@ function addActionListeners() {
 
             const id = btn.dataset.id;
             try {
-                const res = await fetch(`http://localhost/CMS-toyshop/server/carModels/variant/${id}`, {
+                const res = await fetch(CONFIG.API_BASE+`carModels/variant/${id}`, {
                     method: 'DELETE',
                     credentials: 'include'
                 });
@@ -232,7 +235,7 @@ addProductForm.addEventListener('submit', async (e) => {
     saveBtn.textContent = "Adding...";
 
     try {
-        const response = await fetch('http://localhost/CMS-toyshop/server/carModels/variant', {
+        const response = await fetch(CONFIG.API_BASE+'carModels/variant', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -250,7 +253,7 @@ addProductForm.addEventListener('submit', async (e) => {
 
         if (response.ok) {
             alert("Product added successfully!");
-            document.getElementById('addProductModal').classList.add('hidden');
+            addModal.classList.add('hidden');
             loadAllProducts(); // refresh list
         } else {
             alert(result.message || "Failed to add product.");
@@ -291,7 +294,7 @@ editProductForm.addEventListener('submit', async (e) => {
     saveEditBtn.textContent = "Saving...";
 
     try {
-        const response = await fetch(`http://localhost/CMS-toyshop/server/carModels/variant/${variantId}`, {
+        const response = await fetch(CONFIG.API_BASE+`carModels/variant/${variantId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

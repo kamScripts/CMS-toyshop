@@ -1,3 +1,4 @@
+import CONFIG from './config.js'
 const registerForm = document.querySelector('#registerForm');
 const username = document.querySelector('#regUsername');
 const email = document.querySelector('#regEmail');
@@ -57,7 +58,7 @@ username.addEventListener('blur', async () => {
     }
 
     try {
-        const response = await fetch('http://localhost/CMS-toyshop/server/users/checkUser', {
+        const response = await fetch(CONFIG.API_BASE+'users/checkUser', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -192,7 +193,7 @@ registerForm.addEventListener('submit', async (e) => {
     submitBtn.textContent = "Creating account...";
 
     try {
-        const response = await fetch('http://localhost/CMS-toyshop/server/users/register', {
+        const response = await fetch(CONFIG.API_BASE+'users/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

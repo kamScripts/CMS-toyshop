@@ -1,15 +1,8 @@
 <?php
 declare(strict_types=1);
 
-/**
- * Category Controller - Simple crud for lookup tables
- * Handles: brand, scale, collection, model handles CREATE RECORD, GET ALL, DELETE
- * Get Single record handle by /modelCars/{table}/{id}
- * URL pattern: /categories/{table}   and   /categories/{table}/{id}
- */
 class CategoryController
 {
-    //Reduce access to DB only to necessary tables for CMS app.
     private array $allowedTables = ['brand', 'scale', 'collection', 'model'];
 
     private BrandGateway $brandGateway;
@@ -31,33 +24,37 @@ class CategoryController
 
     public function handleRequest(string $method, ?string $table, ?string $id): void
     {
-        // Check if table is allowed
         if (!$table || !in_array($table, $this->allowedTables, true)) {
             http_response_code(404);
-            echo json_encode([
-                "status" => "error",
-                "message" => "Invalid category table."
-            ]);
+            echo json_encode(["status" => "error", "message" => "Invalid category table: " . ($table ?? 'null')]);
             return;
         }
 
-        switch ($method) {
-            case 'GET':
-                $this->getAll($table);
-                break;
+        try {
+            switch ($method) {
+                case 'GET':
+                    $this->getAll($table);
+                    break;
 
-            case 'POST':
-                $this->create($table);
-                break;
+                case 'POST':
+                    $this->create($table);
+                    break;
 
-            case 'DELETE':
-                $this->delete($table, $id);
-                break;
+                case 'DELETE':
+                    $this->delete($table, $id);
+                    break;
 
-            default:
-                http_response_code(405);
-                header("Allow: GET, POST, DELETE");
-                echo json_encode(["status" => "error", "message" => "Method not allowed"]);
+                default:
+                    http_response_code(405);
+                    echo json_encode(["status" => "error", "message" => "Method not allowed"]);
+            }
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                "status" => "error",
+                "message" => "Error in " . $table,
+                "debug" => $e->getMessage()
+            ]);
         }
     }
 
@@ -77,16 +74,10 @@ class CategoryController
     {
         $data = (array) json_decode(file_get_contents("php://input"), true);
 
-        if (empty($data)) {
-            http_response_code(400);
-            echo json_encode(["status" => "error", "message" => "No data received"]);
-            return;
-        }
-
         $gateway = $this->getGateway($table);
         $newId = $gateway->create($data);
 
-        if ($newId) {
+        if ($newId > 0) {
             http_response_code(201);
             echo json_encode([
                 "status" => "success",
@@ -100,27 +91,27 @@ class CategoryController
     }
 
     private function delete(string $table, ?string $id): void
-    {
-        if (!$id || !is_numeric($id)) {
-            http_response_code(400);
-            echo json_encode(["status" => "error", "message" => "Invalid or missing ID."]);
-            return;
-        }
-
-        $gateway = $this->getGateway($table);
-        $rows = $gateway->delete($id);
-
-        if ($rows > 0) {
-            echo json_encode([
-                "status" => "success",
-                "message" => "$table deleted successfully.",
-                "rows" => $rows
-            ]);
-        } else {
-            http_response_code(404);
-            echo json_encode(["status" => "error", "message" => "Record not found."]);
-        }
+{
+    if (!$id || !is_numeric($id)) {
+        http_response_code(400);
+        echo json_encode(["status" => "error", "message" => "Invalid or missing ID."]);
+        return;
     }
+
+    $gateway = $this->getGateway($table);
+    $rows = $gateway->delete((string)$id);   // ← Cast to string
+
+    if ($rows > 0) {
+        echo json_encode([
+            "status" => "success",
+            "message" => "$table deleted successfully.",
+            "rows" => $rows
+        ]);
+    } else {
+        http_response_code(404);
+        echo json_encode(["status" => "error", "message" => "Record not found."]);
+    }
+}
 
     private function getGateway(string $table)
     {
@@ -129,7 +120,7 @@ class CategoryController
             'scale'       => $this->scaleGateway,
             'collection'  => $this->collectionGateway,
             'model'       => $this->modelGateway,
-            default       => throw new Exception("Invalid table")
+            default       => throw new Exception("Invalid table: " . $table)
         };
     }
 }

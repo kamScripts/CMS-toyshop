@@ -1,19 +1,22 @@
 <?php
 /**
  *
- * TODO: add the error and exception handlers
- * TODO: add users request and image upload requests
+ *
+ *
  */
 //enables type declarations
 declare(strict_types=1);
+error_reporting(E_ALL);
+ini_set('display_errors', 0);   // Change to 1 temporarily if needed
 session_start();
+
 //autoloader automatic class import.
 //Directory separator for path compatibility on any OS.
 spl_autoload_register(function ($className){
     require_once __DIR__ . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . $className . ".php";
 });
 
-header("Access-Control-Allow-Origin: http://localhost");
+header("Access-Control-Allow-Origin: https://kamscripts.site");
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: GET, POST, PATCH, DELETE");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -24,11 +27,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 $parts = explode("/", $_SERVER["REQUEST_URI"]);
-$requested = $parts[3]; //Method from a client
+$requested = $parts[2]; //Method from a public_html
 
 
-$itemId = $parts[4] ?? null; //  id of  full product specs/subCategory
-$detailId = $parts[5] ?? null; // detail Id - carModels/brand/1
+$itemId = $parts[3] ?? null; //  id of  full product specs/subCategory
+$detailId = $parts[4] ?? null; // detail Id - carModels/brand/1
 $configPath = __DIR__ . DIRECTORY_SEPARATOR . "config.ini" ;
 
 try {
@@ -67,21 +70,33 @@ try {
             $userController = new UserController($userGateway);
             $userController->handleRequest($_SERVER["REQUEST_METHOD"], $itemId);
             break;
-        case "categories":
+case "categories":
+    try {
 
-            $categoryController = new CategoryController(
-                $brandGateway,
-                $scaleGateway,
-                $collectionGateway,
-                $modelGateway
-            );
+        $categoryController = new CategoryController(
+            $brandGateway,
+            $scaleGateway,
+            $collectionGateway,
+            $modelGateway
+        );
 
-            $categoryController->handleRequest(
-                $_SERVER["REQUEST_METHOD"],
-                $itemId,      // table name
-                $detailId     // record id
-            );
-            break;
+        $categoryController->handleRequest(
+            $_SERVER["REQUEST_METHOD"],
+            $itemId,
+            $detailId
+        );
+
+    } catch (Throwable $e) {   // Catch everything, including fatal errors
+        http_response_code(500);
+        echo json_encode([
+            "status" => "error",
+            "message" => "CategoryController crashed",
+            "error" => $e->getMessage(),
+            "file" => $e->getFile(),
+            "line" => $e->getLine()
+        ]);
+    }
+    break;
 
         default:
             http_response_code(404);

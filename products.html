@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
     <title>BestCarsProject</title>
-    <script src="js/products.js" defer></script>
+    <script type="module" src="js/products.js" defer></script>
+    <script type="module" src="js/config.js" defer></script>
     <script src="js/headerSearch.js" defer></script>
 
 </head>
@@ -28,14 +29,14 @@
                 </li>
                 <li class="userNavItem iconItem">
                     <!--Make a popup with info about project-->
-                    <a href="index.html">
+                    <a href="index.html" class="unavailable">
                         <img class="icon topIcon" src="assets/appImages/info.svg" alt="Info Icon">
                         Info
                     </a>
                 </li>
                 <li class="userNavItem iconItem">
                     <!--Local storage only add/remove from trolley-->
-                    <a href="index.html">
+                    <a href="index.html" class="unavailable">
                         <img class="icon topIcon" src="assets/appImages/trolleyIcon.svg" alt="Trolley Icon">
                         Trolley
                     </a>
@@ -54,7 +55,7 @@
 
             </ul>
         </nav>
-        <form class="horizontalForm" action="" method="post" role="search">
+        <form class="horizontalForm" method="post" role="search">
             <label for="searchBar" id="searchLabel">Search Products</label>
             <input type="text" id="searchBar" name="searchBar" placeholder="Search here...">
             <button type="submit" class="primaryBttn" aria-label="Search products">Search</button>
@@ -62,7 +63,7 @@
     </div>
 </header>
 <main>
-    <section id="productsSection" class="mainContainer">
+    <div id="productsSection" class="mainContainer">
         <!-- Sidebar Filters -->
         <aside class="filtersSidebar">
             <h2>Filters</h2>
@@ -142,26 +143,19 @@
         </aside>
 
         <!-- Products Gallery -->
-        <section class="productsContent">
+        <div class="productsContent">
             <section class="productsHeader">
                 <h2>All Products</h2>
                 <p id="resultsCount">Showing <span id="productCount">0</span> products</p>
             </section>
-
-            <!-- Products will be injected here by JavaScript -->
-            <section id="productsGrid" class="productsGrid">
-                <!-- Dynamic product cards will appear here -->
-            </section>
-
-            <!-- Loading state -->
-            <div id="loading" class="loading">Loading products...</div>
-
-            <!-- No results message -->
+            <!-- Products injected here by JavaScript -->
+            <div id="productsGrid" class="productsGrid"></div>
+            <div id="loading" class="loading"><p>Loading products...</p></div>
             <div id="noResults" class="noResults inactive">
                 <p>No products found matching your filters.</p>
             </div>
-        </section>
-    </section>
+        </div>
+    </div>
 </main>
 <footer>
     <section class="footerSection" aria-label="Site Map">
@@ -198,10 +192,8 @@
                     </a>
                 </li>
             </ul>
-
         </nav>
     </section>
-
 </footer>
 </body>
 </html>

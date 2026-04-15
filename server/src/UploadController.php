@@ -98,7 +98,7 @@ class UploadController
         //After sanitising name, validating image details, safely join file path.
         $cleanFilename = $filename . "." . $file_extension;
 
-        $destination = __DIR__ . "/../images/products/" . $cleanFilename;
+        $destination = __DIR__ . "/../../assets/products/" . $cleanFilename;
         //save file to the destination
         if (move_uploaded_file($file["tmp_name"], $destination)) {
             $imagePath = $cleanFilename;

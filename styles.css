@@ -54,7 +54,7 @@ header {
   position: sticky;
   top: 0;
   z-index: 100;
-  padding: var(--space-xl) 64px;
+  padding: var(--space-xs) 24px;
 }
 /* ============== HEADER TOP============== */
 .topHeader {
@@ -62,7 +62,7 @@ header {
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--colour-border);
-  margin-bottom: var(--space-xl);
+  margin-bottom: 4px;
 }
 
 .logoLink {
@@ -198,6 +198,7 @@ p  {
 .primaryBttn,
 .secondaryBttn {
   padding: 14px 24px;
+  margin: auto var(--space-md);
   border: none;
   border-radius: var(--radius-sm);
   font-size: 1.05rem;
@@ -350,6 +351,9 @@ footer a:hover {
 .inactive {
   display: none;
 }
+.unavailable {
+  cursor: not-allowed;
+}
 .error {
   outline: indianred solid 2px;
 }
@@ -459,7 +463,6 @@ footer a:hover {
   border: none;
   display: flex;
   flex-direction: column;
-
   gap: 12px;
 }
 .priceRange input {
@@ -475,16 +478,18 @@ footer a:hover {
   box-shadow: var(--shadow-sm);
   transition: transform 0.3s, box-shadow 0.3s;
 }
+.productCard p {
+  margin: 0;
+}
 
 .productCard:hover {
-  transform: translateY(-8px);
+  transform: translateY(-4px);
   box-shadow: 0 15px 35px rgba(0,0,0,0.12);
 }
 .productPrice {
   font-size: 1.3rem;
   font-weight: bold;
   color: var(--colour-primary);
-  margin: 8px 0;
 }
 .cardImage {
   width: 100%;
@@ -498,7 +503,7 @@ footer a:hover {
   display: flex;
   flex-direction: column;
   gap: var(--space-xs);
-  margin-top: 12px;
+  margin: var(--space-xs);
 }
 
 
@@ -593,10 +598,16 @@ footer a:hover {
   #searchBar {
     display: none;
   }
+  ul, li,header, .topHeader, .bottomHeader {
+    margin: 0;
+    padding: 0;
+    gap: 4px;
 
+
+  }
   .topHeader {
     flex-direction: column;
-    gap: 8px;
+
   }
 
   h1 {

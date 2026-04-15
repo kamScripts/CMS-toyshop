@@ -1,5 +1,5 @@
 import { redirectIfLoggedIn } from "./auth.js";
-
+import CONFIG from "./config.js";
     await redirectIfLoggedIn("dashboard.html");
 
 
@@ -24,7 +24,7 @@ import { redirectIfLoggedIn } from "./auth.js";
         loginBtn.textContent = "Logging in...";
 
         try {
-            const response = await fetch('http://localhost/CMS-toyshop/server/users/login', {
+            const response = await fetch(CONFIG.API_BASE+'users/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password }),

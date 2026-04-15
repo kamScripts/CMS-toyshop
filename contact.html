@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="/favicon.png" type="image/png">
     <title>BestCarsProject contact</title>
     <script src="js/headerSearch.js" defer></script>
 </head>
@@ -26,14 +27,14 @@
                 </li>
                 <li class="userNavItem iconItem">
                     <!--Make a popup with info about project-->
-                    <a href="index.html">
+                    <a href="index.html" class="unavailable">
                         <img class="icon topIcon" src="assets/appImages/info.svg" alt="Info Icon">
                         Info
                     </a>
                 </li>
                 <li class="userNavItem iconItem">
                     <!--Local storage only add/remove from trolley-->
-                    <a href="index.html">
+                    <a href="index.html" class="unavailable">
                         <img class="icon topIcon" src="assets/appImages/trolleyIcon.svg" alt="Trolley Icon">
                         Trolley
                     </a>
@@ -52,7 +53,7 @@
 
             </ul>
         </nav>
-        <form class="horizontalForm" action="" method="post" role="search">
+        <form class="horizontalForm" method="post" role="search">
             <label for="searchBar" id="searchLabel">Search Products</label>
             <input type="text" id="searchBar" name="searchBar" placeholder="Search here...">
             <button type="submit" class="primaryBttn" aria-label="Search products">Search</button>
@@ -60,8 +61,8 @@
     </div>
 </header>
 <main>
-    <section class="mainContainer contactSection">
-        <div class="contactContent">
+    <div class="mainContainer contactSection">
+        <section class="contactContent">
             <h2>Get In Touch</h2>
             <p>Have questions about our products, shipping, or need help with an order? We're here to help!</p>
 
@@ -78,9 +79,9 @@
                 <label class="boldLabel" for="contactMessage">Message</label>
                 <textarea class="membersInput" id="contactMessage" name="message" rows="6" placeholder="Write your message here..." required></textarea>
 
-                <button type="submit" class="primaryBttn">Send Message</button>
+                <button type="submit" class="primaryBttn unavailable" disabled>Send Message</button>
             </form>
-        </div>
+        </section>
 
         <div class="contactInfo">
             <h3>Contact Information</h3>
@@ -93,7 +94,7 @@
                 Saturday: 10:00 AM – 4:00 PM<br>
                 Sunday: Closed</p>
         </div>
-    </section>
+    </div>
 </main>
 <footer>
     <section class="footerSection" aria-label="Site Map">
@@ -102,9 +103,8 @@
             <ul class="siteMap navBar">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="products.html">Products</a></li>
-                <li><a href="aboutUs.html">About Us</a></li>
-                <li><a href="contactUs.html">Contact</a></li>
-                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
             </ul>
         </nav>
     </section>
