@@ -6,8 +6,9 @@
  */
 //enables type declarations
 declare(strict_types=1);
+// Extra de
 error_reporting(E_ALL);
-ini_set('display_errors', 0);   // Change to 1 temporarily if needed
+ini_set('display_errors', '0');
 session_start();
 
 //autoloader automatic class import.
@@ -22,16 +23,15 @@ header("Access-Control-Allow-Methods: GET, POST, PATCH, DELETE");
 header("Access-Control-Allow-Headers: Content-Type");
 header("content-type: application/json; charset=UTF-8");
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit(0);
-}
+//IMPORTANT: URI PARTS ADJUSTED FOR PRODUCTION, LOCALHOST NEED CHECKING PATH
 $parts = explode("/", $_SERVER["REQUEST_URI"]);
-$requested = $parts[2]; //Method from a public_html
+$requested = $parts[3]; // first part of URL like carModels
+//print_r($parts); // VERIFY URL
 
 
-$itemId = $parts[3] ?? null; //  id of  full product specs/subCategory
-$detailId = $parts[4] ?? null; // detail Id - carModels/brand/1
+
+$itemId = $parts[4] ?? null; //  id of  full product specs/subCategory
+$detailId = $parts[5] ?? null; // detail Id - carModels/brand/1
 $configPath = __DIR__ . DIRECTORY_SEPARATOR . "config.ini" ;
 
 try {
@@ -50,7 +50,6 @@ try {
     $variantGateway = new VariantGateway($db);
     switch ($requested) {
         case "carModels":
-
             $productController = new ProductController
             (
                 $brandGateway,
@@ -70,34 +69,6 @@ try {
             $userController = new UserController($userGateway);
             $userController->handleRequest($_SERVER["REQUEST_METHOD"], $itemId);
             break;
-case "categories":
-    try {
-
-        $categoryController = new CategoryController(
-            $brandGateway,
-            $scaleGateway,
-            $collectionGateway,
-            $modelGateway
-        );
-
-        $categoryController->handleRequest(
-            $_SERVER["REQUEST_METHOD"],
-            $itemId,
-            $detailId
-        );
-
-    } catch (Throwable $e) {   // Catch everything, including fatal errors
-        http_response_code(500);
-        echo json_encode([
-            "status" => "error",
-            "message" => "CategoryController crashed",
-            "error" => $e->getMessage(),
-            "file" => $e->getFile(),
-            "line" => $e->getLine()
-        ]);
-    }
-    break;
-
         default:
             http_response_code(404);
             exit;
@@ -106,7 +77,7 @@ case "categories":
 
 } catch (RuntimeException $e) {
     http_response_code(500);
-    echo json_encode(['error' => $e->getMessage()]); // In production log
+    echo json_encode(['error' => $e->getMessage()]);
 }
 
 

@@ -69,9 +69,8 @@
             <h2>Filters</h2>
 
             <form id="filtersForm" class="filtersForm">
-
-                <!-- Model Search -->
                 <fieldset class="filtersFieldset">
+                    <legend> Model Filter</legend>
                     <label for="searchModel">Model</label>
                     <input
                             type="text"
@@ -80,36 +79,32 @@
                             placeholder="e.g. Ferrari 488, Porsche..."
                             class="filtersInput">
                 </fieldset>
-
-                <!-- Category -->
                 <fieldset class="filtersFieldset">
+                    <legend> Collection Filter</legend>
                     <label for="filterCollection">Collection</label>
                     <select id="filterCollection" name="collection" class="filtersInput">
                         <option value="">All Categories</option>
                         <!-- Populated dynamically by JS -->
                     </select>
                 </fieldset>
-
-                <!-- Brand -->
                 <fieldset class="filtersFieldset">
+                    <legend> Brand Filter</legend>
                     <label for="filterBrand">Brand</label>
                     <select id="filterBrand" name="brand" class="filtersInput">
                         <option value="">All Brands</option>
                         <!-- Populated dynamically by JS -->
                     </select>
                 </fieldset>
-
-                <!-- Scale -->
                 <fieldset class="filtersFieldset">
+                    <legend> Scale Filter</legend>
                     <label for="filterScale">Scale</label>
                     <select id="filterScale" name="scale" class="filtersInput">
                         <option value="">All Scales</option>
                         <!-- Populated dynamically by JS -->
                     </select>
                 </fieldset>
-
-                <!-- Price Range -->
                 <fieldset class=filtersFieldset>
+                    <legend> Price Range</legend>
                     <div class="priceRange">
                         <label for="minPrice">Min. Price</label>
                         <input
@@ -133,12 +128,10 @@
                                 step="5">
                     </div>
                 </fieldset>
-
                 <div class="filterButtons">
                     <button type="submit" id="applyFilters" class="primaryBttn">Apply Filters</button>
                     <button type="button" id="resetFilters" class="secondaryBttn">Reset All</button>
                 </div>
-
             </form>
         </aside>
 

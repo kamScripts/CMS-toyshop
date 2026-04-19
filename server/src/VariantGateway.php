@@ -20,7 +20,7 @@ class VariantGateway
             s.scale_id,
             s.scale_name,
             c.collection_id,
-            c.category_name AS collection_name
+            c.collection_name AS collection_name
             
 
         FROM variant v

@@ -18,7 +18,6 @@ const modal = document.getElementById('addCategoryModal');
 let currentType = '';
 
 
-// ==================== EVENT LISTENERS ====================
 document.addEventListener('DOMContentLoaded', async () => {
     const user = await checkAuth();
     if (!user) {
@@ -48,15 +47,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 });
-
-// ==================== LOAD & RENDER ====================
-
+// Fetch content
 async function loadAllCategories(type) {
     currentType = type || 'brand';
     try {
-        const res = await fetch(CONFIG.API_BASE + `categories/${currentType}`);
+        const res = await fetch(CONFIG.API_BASE + `carModels/${currentType}`);
         const data = await res.json();
-
         if (data.status === "success") {
             renderCategories(data.data, currentType);
         } else {
@@ -66,15 +62,14 @@ async function loadAllCategories(type) {
         console.error("Load categories error:", e);
     }
 }
-// ==================== Render table content ====================
+// Render content
 function renderCategories(items, type) {
     const tbody = catBody;
     tbody.innerHTML = '';
-
     items.forEach(item => {
         const idField = Object.keys(item)[0];
         const nameField = Object.keys(item)[1];
-
+        //Create and populate table
         const row = document.createElement('tr');
 
         // ID cell
@@ -87,7 +82,7 @@ function renderCategories(items, type) {
 
         // Name cell
         const tdName = document.createElement('td');
-        tdName.textContent = item[nameField] || '-';
+        tdName.textContent = item[nameField] ;
 
         // Actions cell
         const tdActions = document.createElement('td');
@@ -103,26 +98,22 @@ function renderCategories(items, type) {
     });
     addDeleteListeners();
 }
-// ==================== MODAL ====================
-
+// Modal
 function showAddModal() {
     modalForm.reset();
     modal.classList.remove('hidden');
-
     // Set the modal type select to match current table
     categoryType.value = currentType;
     toggleModelFields();
 }
-
 function closeAddModal() {
     modal.classList.add('hidden');
 }
-
+// Modal contains two forms one for 2-column tables and second for model table
 function toggleModelFields() {
     const type = categoryType.value;
     const simpleGroup = smallForm;
     const modelGroup = largeForm;
-
     if (type === 'model') {
         simpleGroup.classList.add('hidden');
         modelGroup.classList.remove('hidden');
@@ -132,19 +123,17 @@ function toggleModelFields() {
         modelGroup.classList.add('hidden');
     }
 }
-// ==================== DROP DOWN OPTIONS FOR NEW MODEL RECORD ====================
+// Populate model form select options.
 async function loadModelDropdowns() {
     try {
         const [brandRes, scaleRes, collRes] = await Promise.all([
-            fetch(CONFIG.API_BASE + 'categories/brand'),
-            fetch(CONFIG.API_BASE + 'categories/scale'),
-            fetch(CONFIG.API_BASE + 'categories/collection')
+            fetch(CONFIG.API_BASE + 'carModels/brand'),
+            fetch(CONFIG.API_BASE + 'carModels/scale'),
+            fetch(CONFIG.API_BASE + 'carModels/collection')
         ]);
-
         const brandData = await brandRes.json();
         const scaleData = await scaleRes.json();
         const collData = await collRes.json();
-
         populateSelect('modelBrand', brandData.data, 'brand_id', 'brand_name');
         populateSelect('modelScale', scaleData.data, 'scale_id', 'scale_name');
         populateSelect('modelCollection', collData.data, 'collection_id', 'category_name');
@@ -152,7 +141,6 @@ async function loadModelDropdowns() {
         console.error("Failed to load dropdowns", e);
     }
 }
-
 function populateSelect(selectId, items, idField, nameField) {
     const select = document.getElementById(selectId);
     select.innerHTML = '<option value="">-- Select --</option>';
@@ -164,7 +152,7 @@ function populateSelect(selectId, items, idField, nameField) {
     });
 }
 
-// ==================== ADD-RECORD REQUEST ====================
+// add-form submission
 
 async function handleAddSubmit(e) {
     e.preventDefault();
@@ -186,26 +174,21 @@ async function handleAddSubmit(e) {
             [`${type}_name`]: categoryName.value.trim()
         };
     }
-
     if (Object.values(bodyData).every(v => !v)) {
         alert("Please fill the required fields.");
         return;
     }
-
     const saveBtn = document.getElementById('saveAddBtn');
     saveBtn.disabled = true;
     saveBtn.textContent = "Adding...";
-
     try {
-        const response = await fetch(CONFIG.API_BASE+`categories/${type}`, {
+        const response = await fetch(CONFIG.API_BASE+`carModels/${type}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(bodyData),
             credentials: 'include'
         });
-
         const result = await response.json();
-
         if (response.ok) {
             alert(`${type} added successfully!`);
             closeAddModal();
@@ -221,22 +204,18 @@ async function handleAddSubmit(e) {
     }
 }
 
-// ==================== DELETE RECORD ====================
-
+// Delete record
 function addDeleteListeners() {
     document.querySelectorAll('.deleteBtn').forEach(btn => {
         btn.addEventListener('click', async () => {
             if (!confirm('Delete this item?')) return;
-
             const id = btn.dataset.id;
             const type = btn.dataset.type;
-
             try {
-                const res = await fetch(CONFIG.API_BASE+`categories/${type}/${id}`, {
+                const res = await fetch(CONFIG.API_BASE+`carModels/${type}/${id}`, {
                     method: 'DELETE',
                     credentials: 'include'
                 });
-
                 if (res.ok) {
                     alert("Deleted successfully.");
                     loadAllCategories(currentType);

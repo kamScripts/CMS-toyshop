@@ -1,4 +1,5 @@
- const CONFIG = {
+//API base for production/deployment
+const CONFIG = {
     API_BASE: window.location.hostname.includes('localhost')
      ? 'http://localhost/CMS-toyshop/server/'
         : '/server/'

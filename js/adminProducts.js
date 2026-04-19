@@ -10,12 +10,12 @@ const variantInput = document.getElementById('productVariant');
 const scaleIdInput = document.getElementById('productScale');
 const priceInput = document.getElementById('productPrice');
 const stockInput = document.getElementById('productStock');
+const productImagePath = document.getElementById('productImagePath');
 const addTbody = document.getElementById('productsBody');
 const editModal = document.getElementById('editProductModal');
 const editProductForm = document.getElementById('editProductForm');
 const editCancelBtn = document.getElementById('cancelEditBtn');
 const saveEditBtn = document.getElementById('saveEditBtn');
-
 const editVariantIdInput = document.getElementById('editVariantId');
 const editBrandInput = document.getElementById('editProductBrand');
 const editModelInput = document.getElementById('editProductModel');
@@ -26,9 +26,8 @@ const editStockInput = document.getElementById('editProductStock');
 const editSkuInput = document.getElementById('editProductSku');
 const editImagepathInput = document.getElementById('editProductImagepath');
 
-
 let allProducts = [];
-//brandIdInput productModel
+// Load content for select menus
 async function loadLookupData(brandSelect, scaleSelect, modelSelect) {
     try {
         // Load Brands
@@ -49,7 +48,6 @@ async function loadLookupData(brandSelect, scaleSelect, modelSelect) {
             opt.textContent = s.scale_name;
             scaleSelect.appendChild(opt);
         });
-
         const models = await fetch(CONFIG.API_BASE+'carModels/model');
         const modelData = await models.json();
         modelData.data.forEach(s => {
@@ -63,7 +61,6 @@ async function loadLookupData(brandSelect, scaleSelect, modelSelect) {
         console.error("Failed to load lookup data", e);
     }
 }
-
 async function loadAllProducts() {
     try {
         const res = await fetch(CONFIG.API_BASE+'carModels');
@@ -74,7 +71,6 @@ async function loadAllProducts() {
         console.error(e);
     }
 }
-
 function renderProducts(products, tbody) {
 
     tbody.innerHTML = '';
@@ -88,7 +84,7 @@ function renderProducts(products, tbody) {
             p.model_name,
             p.variant || '-',
             p.scale_name || '-',
-            `$${parseFloat(p.price || 0).toFixed(2)}`,
+            `£${parseFloat(p.price || 0).toFixed(2)}`,
             p.stock || 0
         ];
 
@@ -124,14 +120,12 @@ function addActionListeners() {
     document.querySelectorAll('.deleteBtn').forEach(btn => {
         btn.addEventListener('click', async () => {
             if (!confirm('Delete this product?')) return;
-
             const id = btn.dataset.id;
             try {
                 const res = await fetch(CONFIG.API_BASE+`carModels/variant/${id}`, {
                     method: 'DELETE',
                     credentials: 'include'
                 });
-
                 if (res.ok) {
                     alert("Product deleted successfully.");
                     loadAllProducts();
@@ -144,7 +138,6 @@ function addActionListeners() {
             }
         });
     });
-
     // Edit buttons
     document.querySelectorAll('.editBtn').forEach(btn => {
         btn.addEventListener('click', async () => {
@@ -173,7 +166,6 @@ function showModal(modal, cancelButton) {
 // Show Edit Modal
 function showEditModal(product) {
     editVariantIdInput.value = product.variant_id || '';
-
     editBrandInput.value = product.brand_id || '';
     editModelInput.value = product.model_id || '';
     editVariantInput.value = product.variant || '';
@@ -182,11 +174,9 @@ function showEditModal(product) {
     editStockInput.value = product.stock || 0;
     editSkuInput.value = product.sku || '';
     editImagepathInput.value = product.imagepath || '';
-
     editModal.classList.remove('hidden');
     editModal.removeAttribute('aria-hidden');
 }
-
 // Close Edit Modal
 function closeEditModal() {
     editModal.classList.add('hidden');
@@ -205,35 +195,31 @@ document.addEventListener('DOMContentLoaded', async () => {
     await loadLookupData(brandIdInput,scaleIdInput,modelIdInput);
     await loadLookupData(editBrandInput, editScaleInput, editModelInput)
     loadAllProducts();
-
 });
 // Cancel Edit Modal
 editCancelBtn.addEventListener('click', closeEditModal);
 // Show Add-Product Modal
 addModalBtn.addEventListener('click', async ()=> {
     showModal(addModal, addCancelBtn);
-
 });
 // Handle Add-Product Form submission
 addProductForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-
     const brandId = brandIdInput.value;
     const modelId = modelIdInput.value;
     const variant = variantInput.value.trim();
     const scaleId = scaleIdInput.value;
     const price = priceInput.value;
     const stock = stockInput.value;
-
+    const imagepath = productImagePath.value;
     if (!brandId || !modelId || !scaleId || !price) {
         alert("Please fill all required fields.");
         return;
     }
-
+    // disable button for the of processing a request
     const saveBtn = document.getElementById('saveAddBtn');
     saveBtn.disabled = true;
     saveBtn.textContent = "Adding...";
-
     try {
         const response = await fetch(CONFIG.API_BASE+'carModels/variant', {
             method: 'POST',
@@ -244,13 +230,12 @@ addProductForm.addEventListener('submit', async (e) => {
                 variant: variant || null,
                 scale_id: parseInt(scaleId),
                 price: parseFloat(price),
-                stock: parseInt(stock)
+                stock: parseInt(stock),
+                imagepath: imagepath || null
             }),
             credentials: 'include'
         });
-
         const result = await response.json();
-
         if (response.ok) {
             alert("Product added successfully!");
             addModal.classList.add('hidden');
@@ -266,18 +251,15 @@ addProductForm.addEventListener('submit', async (e) => {
         saveBtn.textContent = "Add Product";
     }
 });
-// ==================== EDIT FORM SUBMISSION ====================
+// Edit form submission
 editProductForm.addEventListener('submit', async (e) => {
-
     e.preventDefault();
-
     const variantId = editVariantIdInput.value;
     console.log(variantId);
     if (!variantId) {
         alert("Error: Variant ID missing.");
         return;
     }
-
     const modelId = editModelInput.value;
     const variant_name = editVariantInput.value.trim();
     const price = editPriceInput.value;
@@ -289,10 +271,8 @@ editProductForm.addEventListener('submit', async (e) => {
         alert("Please fill all required fields.");
         return;
     }
-
     saveEditBtn.disabled = true;
     saveEditBtn.textContent = "Saving...";
-
     try {
         const response = await fetch(CONFIG.API_BASE+`carModels/variant/${variantId}`, {
             method: 'PATCH',
@@ -307,9 +287,7 @@ editProductForm.addEventListener('submit', async (e) => {
             }),
             credentials: 'include'
         });
-
         const result = await response.json();
-
         if (response.ok) {
             alert("Product updated successfully!");
             closeEditModal();

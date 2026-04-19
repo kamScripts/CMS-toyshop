@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS scale (
 
 CREATE TABLE collection (
   collection_id INT AUTO_INCREMENT,
-  category_name VARCHAR(30) NOT NULL,
+  collection_name VARCHAR(30) NOT NULL,
   PRIMARY KEY (collection_id));
 
 CREATE TABLE model (

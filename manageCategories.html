@@ -100,22 +100,27 @@
     <div id="addCategoryModal" class="modal hidden">
       <div class="modal-content">
         <h3>Add New Category</h3>
-        <form id="addCategoryForm">
-          <label for="categoryType">Type:</label>
-          <select id="categoryType" >
-            <option value="brand">Brand</option>
-            <option value="scale">Scale</option>
-            <option value="collection">Collection</option>
-            <option value="model">Model</option>
-          </select>
+        <form id="addCategoryForm" role="form">
+          <fieldset>
+            <legend>ACategory</legend>
+            <label for="categoryType">Type:</label>
+            <select id="categoryType" name="categoryType">
+              <option value="brand">Brand</option>
+              <option value="scale">Scale</option>
+              <option value="collection">Collection</option>
+              <option value="model">Model</option>
+            </select>
+          </fieldset>
           <!-- 2-column table fieldset -->
           <fieldset id="simpleNameGroup">
+            <legend>Add Record </legend>
             <label for="categoryName">Name:</label>
             <input type="text" id="categoryName" >
           </fieldset>
 
           <!-- Model-specific fields -->
           <fieldset id="modelFields" class="hidden">
+            <legend>Add Model record</legend>
             <label for="modelName">Model Name:</label>
             <input type="text" id="modelName" >
 

@@ -10,7 +10,6 @@ const filterScale = document.querySelector('#filterScale');
 const searchModel = document.querySelector('#searchModel');
 const minPriceInput = document.querySelector('#minPrice');
 const maxPriceInput = document.querySelector('#maxPrice');
-
 const productCount = document.querySelector('#productCount');
 const productGrid = document.querySelector('#productsGrid');
 const loading = document.querySelector('#loading');
@@ -41,7 +40,6 @@ const initProducts = async () => {
 };
 
 const applyFiltersFromUrl = (searchTerm) => {
-
     const filtered = allProducts.filter(product => {
         return !searchTerm ||
             (product.model_name && product.model_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -74,9 +72,9 @@ const fetchCollection = async () => {
     }
     const res = await response.json();
     res.data.forEach((item) => {
-        const { collection_id, category_name } = item;
+        const { collection_id, collection_name } = item;
         const option = document.createElement('option');
-        option.text = category_name;
+        option.text = collection_name;
         option.value = collection_id;
         filterCollection.appendChild(option);
     })
@@ -118,13 +116,11 @@ const fetchData = async (url) => {
         loading.classList.add('inactive');   // hide loading in any case
     }
 };
-
 const showProducts = (data) => {
     const { products } = data || {};
     allProducts = products || [];
     renderProducts(allProducts);
 };
-
 const renderProducts = (productsToShow) => {
     //Clear the container
     productGrid.innerHTML = '';
@@ -134,7 +130,6 @@ const renderProducts = (productsToShow) => {
         productCount.textContent = '0';
         return;
     }
-
     productsToShow.forEach(product => {
         const {
             model_id, model_name, variant, description, price, imagepath,
@@ -166,7 +161,7 @@ const renderProducts = (productsToShow) => {
 
         const priceEl = document.createElement('p');
         priceEl.classList.add('productPrice');
-        priceEl.textContent = `$${parseFloat(price).toFixed(2)}`;
+        priceEl.textContent = `£${parseFloat(price).toFixed(2)}`;
 
         const btnContainer = document.createElement('div');
         btnContainer.classList.add('productActions');
@@ -191,7 +186,7 @@ const renderProducts = (productsToShow) => {
 
     productCount.textContent = productsToShow.length;
 };
-
+// Filters apply button
 applyButton.addEventListener('click', (e) => {
     e.preventDefault();
 
@@ -221,14 +216,13 @@ applyButton.addEventListener('click', (e) => {
 
     renderProducts(filtered);
 });
-
-
+//Filters resetButton
 resetButton.addEventListener('click', () => {
     filtersForm.reset();
     renderProducts(allProducts);
 });
 
-
+//Load all products and load select options
 initProducts();
 fetchScale();
 fetchCollection();

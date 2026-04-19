@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 method: 'POST',
                 credentials: 'include'
             });
-
             localStorage.removeItem('currentUser');
             window.location.href = 'login.html';
         } catch (e) {
@@ -37,7 +36,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
     card.appendChild(logoutBtn);
-
     deleteProfileBtn.addEventListener('click', async () => {
         const user_id = user.user_id
         console.log("user_id: " + user_id);
@@ -47,7 +45,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     method: 'DELETE',
                     credentials: 'include'
                 });
-
                 localStorage.removeItem('currentUser');
                 logout();
             } catch (e) {
@@ -56,7 +53,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
     })
-
     editProfileBtn.addEventListener('click', () => {
         alert("Profile editing feature coming soon!");
     });

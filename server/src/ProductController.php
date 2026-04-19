@@ -163,6 +163,7 @@ class ProductController {
                 $data = (array)json_decode(file_get_contents("php://input"), TRUE);
                 $result = $this->createProduct($data, $id);
                 if ($result>0) {
+                    http_response_code(201);
                     echo json_encode([
                         "status" => "success",
                         "message" => "item with index $result successfully inserted."

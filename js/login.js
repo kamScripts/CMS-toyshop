@@ -2,27 +2,24 @@ import { redirectIfLoggedIn } from "./auth.js";
 import CONFIG from "./config.js";
     await redirectIfLoggedIn("dashboard.html");
 
-
     const loginForm = document.getElementById('loginForm');
     const loginError = document.getElementById('loginError');
     const loginBtn = document.getElementById('loginBtn');
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
-
+    // Log in
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         loginError.textContent = '';
         const username = usernameInput.value.trim();
         const password = passwordInput.value;
-
         if (!username || !password) {
             loginError.textContent = "Please enter both username and password.";
             return;
         }
-
+        // Disable button for request processing time
         loginBtn.disabled = true;
         loginBtn.textContent = "Logging in...";
-
         try {
             const response = await fetch(CONFIG.API_BASE+'users/login', {
                 method: 'POST',
@@ -30,9 +27,7 @@ import CONFIG from "./config.js";
                 body: JSON.stringify({ username, password }),
                 credentials: 'include'
             });
-
             const result = await response.json();
-
             if (response.ok) {
                 alert("Login successful!");
                 window.location.href = "dashboard.html";

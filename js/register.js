@@ -4,7 +4,6 @@ const username = document.querySelector('#regUsername');
 const email = document.querySelector('#regEmail');
 const usernameError = document.querySelector('#usernameError');
 const usernameConstraint = document.querySelector('#usernameConstraints');
-
 const passwordInput = document.getElementById('regPassword');
 const confirmInput = document.getElementById('confirmPassword');
 const passwordMessage = document.getElementById('passwordMessage');
@@ -22,10 +21,8 @@ const usernameRegex = /^[a-zA-Z0-9_]+$/;
 //USERNAME VALIDATION (onkeyup)
 username.addEventListener('keyup', () => {
     const value = username.value.trim();
-
     usernameConstraint.textContent = '';
     usernameConstraint.classList.remove('error', 'success');
-
     if (value === '') {
         return; // don't show error while typing empty
     }
@@ -44,7 +41,7 @@ username.addEventListener('keyup', () => {
     }
 });
 
-//USERNAME AVAILABILITY CHECK (onblur)
+//Username availability test on blur
 username.addEventListener('blur', async () => {
     const value = username.value.trim();
 
@@ -52,11 +49,9 @@ username.addEventListener('blur', async () => {
     usernameError.textContent = '';
     usernameError.classList.remove('error', 'success');
 
-    // Don't check if field is empty or has format errors
     if (value.length < 3 || value.length > 16 || !usernameRegex.test(value)) {
         return;
     }
-
     try {
         const response = await fetch(CONFIG.API_BASE+'users/checkUser', {
             method: 'POST',
@@ -83,7 +78,7 @@ username.addEventListener('blur', async () => {
     }
 });
 
-//PASSWORD STRENGTH CHECK
+//Password strength check
 passwordInput.addEventListener('input', () => {
     const password = passwordInput.value;
 
@@ -106,7 +101,7 @@ passwordInput.addEventListener('input', () => {
         message = "Password must be maximum 32 characters long";
     }
     else {
-        // Count criteria
+        // Add strength points for passed tests
         if (hasUpper.test(password)) strength++;
         if (hasLower.test(password)) strength++;
         if (hasNumber.test(password)) strength++;
@@ -131,20 +126,18 @@ passwordInput.addEventListener('input', () => {
     }
 
     passwordMessage.textContent = message;
-    strengthBar.style.width = `${(strength / 4) * 100}%`;
+    strengthBar.style.width = `${(strength / 4) * 100}%`; //Round a results
 });
-//CONFIRM PASSWORD MATCH
+
 confirmInput.addEventListener('input', () => {
     const password = passwordInput.value;
     const confirm = confirmInput.value;
 
     confirmError.textContent = '';
     confirmError.classList.remove('error', 'success');
-
     if (confirm === '') {
         return;
     }
-
     if (password === confirm) {
         confirmError.textContent = "Passwords match.";
         confirmError.classList.add('success');
@@ -153,10 +146,9 @@ confirmInput.addEventListener('input', () => {
         confirmError.classList.add('error');
     }
 });
-//SEND REQUEST
+//form submission
 registerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-
     // Clean and prepare values for post
     const value = username.value.trim();
     const trimmedEmail = email.value.trim();
@@ -167,22 +159,18 @@ registerForm.addEventListener('submit', async (e) => {
         alert(' Username can only contain letters, numbers, and underscores');
         return;
     }
-
     if (value.length < 3) {
         alert("Username must be at least 3 characters long.");
         return;
     }
-
     if (!trimmedEmail.includes('@') || trimmedEmail.length < 5) {
         alert("Please enter a valid email address.");
         return;
     }
-
     if (passwordValue.length < 6) {
         alert("Password must be at least 6 characters long.");
         return;
     }
-
     if (passwordValue !== confirmValue) {
         alert("Passwords do not match!");
         return;
@@ -191,7 +179,6 @@ registerForm.addEventListener('submit', async (e) => {
     // Disable button for request processing
     submitBtn.disabled = true;
     submitBtn.textContent = "Creating account...";
-
     try {
         const response = await fetch(CONFIG.API_BASE+'users/register', {
             method: 'POST',
@@ -204,9 +191,7 @@ registerForm.addEventListener('submit', async (e) => {
                 password: passwordValue
             })
         });
-
         const result = await response.json();
-
         if (response.ok) {
             alert("Registration successful! You can now log in.");
             registerForm.reset();
@@ -214,7 +199,6 @@ registerForm.addEventListener('submit', async (e) => {
         } else {
             alert(result.message || "Registration failed. Please try again.");
         }
-
     } catch (error) {
         console.error("Error:", error);
         alert("Unable to connect to server. Please try again later.");

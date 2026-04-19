@@ -40,16 +40,13 @@ async function loadImageList() {
         </tr>
     `;
 }
-
 function showUploadModal() {
     uploadModal.classList.remove('hidden');
     imgFile.value = '';
 }
-
 function closeUploadModal() {
     uploadModal.classList.add('hidden');
 }
-
 async function handleImageUpload(e) {
     e.preventDefault();
     const file = imgFile.files[0];
@@ -57,22 +54,17 @@ async function handleImageUpload(e) {
         alert("Please select an image.");
         return;
     }
-
     const formData = new FormData();
     formData.append('image', file);
-
     uploadBtn.disabled = true;
     uploadBtn.textContent = "Uploading...";
-
     try {
         const response = await fetch(CONFIG.API_BASE+'upload', {
             method: 'POST',
             body: formData,
             credentials: 'include'
         });
-
         const result = await response.json();
-
         if (response.ok && result.status === "success") {
             alert(`Image uploaded successfully!\n\nFilename: ${result.filename}`);
             closeUploadModal();

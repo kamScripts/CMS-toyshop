@@ -24,18 +24,18 @@ class CollectionGateway
         return $row;
     }
     public function create(array $data): string {
-        $sql = "INSERT INTO collection (category_name) VALUES (:category_name)";
+        $sql = "INSERT INTO collection (collection_name) VALUES (:collection_name)";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(":category_name", $data["category_name"], PDO::PARAM_STR);
+        $stmt->bindValue(":collection_name", $data["collection_name"], PDO::PARAM_STR);
         $stmt->execute();
         return $this->pdo->lastInsertId();
     }
     public function update(int $currentId, array $new): int {
         $current = $this->get($currentId);
-        $sql = "UPDATE collection SET category_name = :category_name WHERE collection_id = :id";
+        $sql = "UPDATE collection SET collection_name = :collection_name WHERE collection_id = :id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(
-            ":category_name", $new["category_name"] ?? $current["category_name"],
+            ":collection_name", $new["collection_name"] ?? $current["collection_name"],
             PDO::PARAM_STR
         );
         $stmt->bindValue(":id", $current["collection_id"], PDO::PARAM_INT);
